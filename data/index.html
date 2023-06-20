@@ -23,6 +23,12 @@ copies or substantial portions of the Software. -->
       text-align: center;
       color: #fff;
     }
+    h3 {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 1.5rem;
+      text-align: center;
+      color: #fff;
+    }
     .mytabs {
     display: flex;
     flex-wrap: wrap;
@@ -62,6 +68,7 @@ copies or substantial portions of the Software. -->
 </head>
 <body>
   <h2>SPCA Hot Water Monitoring System</h2>
+  <h3>Real Time Monitoring</h3>
   <div class="mytabs">
     <input type="radio" id="tabtemps" name="tab-control" checked="checked">
     <label for="tabtemps">Temperatures</label>
@@ -79,6 +86,7 @@ copies or substantial portions of the Software. -->
       <div id="chart-flow" class="container"></div> <br>
     </div>
   </div>
+  <h3>Historical Data</h3>
 </body>
 <script>
 var chartT = new Highcharts.Chart({
@@ -151,7 +159,7 @@ var chartF = new Highcharts.Chart({
   title: { text: 'Hot Water Flow Rate' },
   series: [{
     type: "line",
-    showInLegend: false,
+    showInLegend: true,
     name: "Hot Water Flow",
     data: []
   }],
