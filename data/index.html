@@ -1,0 +1,198 @@
+<!DOCTYPE HTML><html>
+<!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software. -->
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <style>
+    body {
+      min-width: 310px;
+    	max-width: 800px;
+    	height: 400px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-family: Arial;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+  /* Add a black background color to the top navigation */
+  .topnav {
+      background-color: #333;
+      overflow: hidden;
+    }
+    
+    /* Style the links inside the navigation bar */
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+      font-family: Arial;
+    }
+    
+    /* Change the color of links on hover */
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    
+    /* Add a color to the active/current link */
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="topnav">
+    <a class="active" href="#realtime">Real Time Data</a>
+    <a href="#historical">Historical Data</a>
+  </div>
+  <h2>SPCA Hot Water Monitoring System</h2>
+  <div id="chart-energy" class="container"></div> <br>
+  <div id="chart-temperature" class="container"></div> <br>
+  <div id="chart-flow" class="container"></div>
+</body>
+<script>
+var chartT = new Highcharts.Chart({
+  chart:{ renderTo : 'chart-temperature' },
+  title: { text: 'System Temperatures' },
+  series: [
+    {
+    type: "line",
+    showInLegend: true,
+    name: "Glycol",
+    data: []
+    },
+    {
+    type: "line",
+    showInLegend: true,
+    name: "Hot Water",
+    data: []
+    },
+    {
+    type: "line",
+    showInLegend: true,
+    name: "Cold Water",
+    data: []
+    },
+    {
+    type: "line",
+    showInLegend: true,
+    name: "Solar Preheat",
+    data: []
+    },
+    {
+    type: "line",
+    showInLegend: true,
+    name: "Hybrid Tank",
+    data: []
+    },
+],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Temperature (Celsius)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartT.series[0].data.length > 40) {
+        chartT.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartT.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/temperature", true);
+  xhttp.send();
+}, 15000 ) ;
+var chartF = new Highcharts.Chart({
+  chart:{ renderTo:'chart-flow' },
+  title: { text: 'Hot Water Flow Rate' },
+  series: [{
+    type: "line",
+    showInLegend: false,
+    name: "Hot Water Flow",
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Flow (L/min)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartF.series[0].data.length > 40) {
+        chartF.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartF.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/flow", true);
+  xhttp.send();
+}, 15000 ) ;
+var chartE = new Highcharts.Chart({
+  chart:{ renderTo:'chart-energy' },
+  title: { text: 'Energy Monitoring' },
+  series: [{
+    type: "line",
+    showInLegend: true,
+    name: "Solar Energy Generated",
+    data: []
+  },
+  {
+    type: "line",
+    showInLegend: true,
+    name: "Hybrid Tank Energy In",
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Energy (kWh)' }
+  },
+  credits: { enabled: false }
+});
+</script>
+</html>
