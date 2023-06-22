@@ -5,8 +5,8 @@
 #include <OneWire.h>
 
 AsyncWebServer server(80);
-const char* SSID = "spca";
-const char* PASSWORD = "spca1234";
+const char* SSID = "Peachy2.4";
+const char* PASSWORD = "Friendly";
 
 
 
@@ -26,7 +26,7 @@ void setup() {
     request->send(SPIFFS, "/index.html");
   });
   server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", "50");
+    request->send_P(200, "text/csv", "10,20,30,40,50");
   });
   server.begin();
 }

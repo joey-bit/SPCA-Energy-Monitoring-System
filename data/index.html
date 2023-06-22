@@ -1,4 +1,5 @@
-<!DOCTYPE HTML><html>
+<!DOCTYPE HTML>
+<html>
 <!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,214 +13,120 @@ copies or substantial portions of the Software. -->
   <style>
     body {
       min-width: 310px;
-    	max-width: 800px;
-    	height: 400px;
+      max-width: 1000 auto;
+      height: 400px;
       margin: 0 auto;
       background-color: rgb(67, 70, 207);
     }
+
     h2 {
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-size: 2.5rem;
       text-align: center;
       color: #fff;
     }
+
     h3 {
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-size: 1.5rem;
       text-align: center;
       color: #fff;
     }
+
     .mytabs {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 25px;
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 25px;
     }
+
     .mytabs input[type="radio"] {
-        display: none;
+      display: none;
     }
+
     .mytabs label {
-        padding: 25px;
-        background: #e6a433;
-        font-weight: bold;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      padding: 25px;
+      background: #e6a433;
+      font-weight: bold;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     .mytabs .tab {
-        width: 100%;
-        padding: 20px;
-        background: #fff;
-        order: 1;
-        display: none;
+      width: 100%;
+      padding: 20px;
+      background: #fff;
+      order: 1;
+      display: none;
     }
+
     .mytabs .tab h2 {
-        font-size: 3em;
+      font-size: 3em;
     }
 
-    .mytabs input[type='radio']:checked + label + .tab {
-        display: block;
+    .mytabs input[type='radio']:checked+label+.tab {
+      display: block;
     }
 
-    .mytabs input[type="radio"]:checked + label {
-        background: #fff;
+    .mytabs input[type="radio"]:checked+label {
+      background: #fff;
+    }
+    .img-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
     }
   </style>
 </head>
+
 <body>
-  <h2>SPCA Hot Water Monitoring System</h2>
-  <h3>Real Time Monitoring</h3>
+  <header><img src = "logo.png" alt = "BCSPCA Logo" class="img-center" ></header>
+  <h2>Hot Water Monitoring System</h2>
+  <h3>Realtime Data</h3>
   <div class="mytabs">
-    <input type="radio" id="tabtemps" name="tab-control" checked="checked">
+    <input type="radio" id="tabtemps" name="rt-tab-control" checked="checked">
     <label for="tabtemps">Temperatures</label>
     <div class="tab">
       <div id="chart-temperature" class="container"></div> <br>
     </div>
-    <input type="radio" id="tabenergy" name="tab-control">
+    <input type="radio" id="tabenergy" name="rt-tab-control">
     <label for="tabenergy">Energy</label>
     <div class="tab">
       <div id="chart-energy" class="container"></div> <br>
     </div>
-    <input type="radio" id="tabflow" name="tab-control">
+    <input type="radio" id="tabflow" name="rt-tab-control">
     <label for="tabflow">Hot Water Flow</label>
     <div class="tab">
       <div id="chart-flow" class="container"></div> <br>
     </div>
   </div>
   <h3>Historical Data</h3>
+  <div class="mytabs">
+    <input type="radio" id="hourly" name="hist-tab-control" checked="checked">
+    <label for="hourly">Hourly</label>
+    <div class="tab">
+      <!-- <div id="chart-temperature-hist" class="container"></div> <br> -->
+    </div>
+    <input type="radio" id="daily" name="hist-tab-control">
+    <label for="daily">Daily</label>
+    <div class="tab">
+      <!-- <div id="chart-energy-hist" class="container"></div> <br> -->
+    </div>
+    <input type="radio" id="monthly" name="hist-tab-control">
+    <label for="monthly">Monthly</label>
+    <div class="tab">
+      <!-- <div id="chart-flow-hist" class="container"></div> <br> -->
+    </div>
+    <input type="radio" id="annual" name="hist-tab-control">
+    <label for="annual">Annually</label>
+    <div class="tab">
+      <!-- <div id="chart-flow-hist" class="container"></div> <br> -->
+    </div>
+  </div>
 </body>
-<script>
-var chartT = new Highcharts.Chart({
-  chart:{ renderTo : 'chart-temperature' },
-  title: { text: 'System Temperatures' },
-  series: [
-    {
-    type: "line",
-    showInLegend: true,
-    name: "Glycol",
-    data: []
-    },
-    {
-    type: "line",
-    showInLegend: true,
-    name: "Hot Water",
-    data: []
-    },
-    {
-    type: "line",
-    showInLegend: true,
-    name: "Cold Water",
-    data: []
-    },
-    {
-    type: "line",
-    showInLegend: true,
-    name: "Solar Preheat",
-    data: []
-    },
-    {
-    type: "line",
-    showInLegend: true,
-    name: "Hybrid Tank",
-    data: []
-    },
-],
-  plotOptions: {
-    line: { animation: false,
-      dataLabels: { enabled: true }
-    },
-  },
-  xAxis: { type: 'datetime',
-    dateTimeLabelFormats: { second: '%H:%M:%S' }
-  },
-  yAxis: {
-    title: { text: 'Temperature (Celsius)' }
-  },
-  credits: { enabled: false }
-});
-setInterval(function ( ) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = (new Date()).getTime(),
-          y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if(chartT.series[0].data.length > 40) {
-        chartT.series[0].addPoint([x, y], true, true, true);
-      } else {
-        chartT.series[0].addPoint([x, y], true, false, true);
-      }
-    }
-  };
-  xhttp.open("GET", "/temperature", true);
-  xhttp.send();
-}, 15000 ) ;
-var chartF = new Highcharts.Chart({
-  chart:{ renderTo:'chart-flow' },
-  title: { text: 'Hot Water Flow Rate' },
-  series: [{
-    type: "line",
-    showInLegend: true,
-    name: "Hot Water Flow",
-    data: []
-  }],
-  plotOptions: {
-    line: { animation: false,
-      dataLabels: { enabled: true }
-    },
-  },
-  xAxis: { type: 'datetime',
-    dateTimeLabelFormats: { second: '%H:%M:%S' }
-  },
-  yAxis: {
-    title: { text: 'Flow (L/min)' }
-  },
-  credits: { enabled: false }
-});
-setInterval(function ( ) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = (new Date()).getTime(),
-          y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if(chartF.series[0].data.length > 40) {
-        chartF.series[0].addPoint([x, y], true, true, true);
-      } else {
-        chartF.series[0].addPoint([x, y], true, false, true);
-      }
-    }
-  };
-  xhttp.open("GET", "/flow", true);
-  xhttp.send();
-}, 15000 ) ;
-var chartE = new Highcharts.Chart({
-  chart:{ renderTo:'chart-energy' },
-  title: { text: 'Energy Monitoring' },
-  series: [{
-    type: "line",
-    showInLegend: true,
-    name: "Solar Energy Generated",
-    data: []
-  },
-  {
-    type: "line",
-    showInLegend: true,
-    name: "Hybrid Tank Energy In",
-    data: []
-  }],
-  plotOptions: {
-    line: { animation: false,
-      dataLabels: { enabled: true }
-    },
-  },
-  xAxis: { type: 'datetime',
-    dateTimeLabelFormats: { second: '%H:%M:%S' }
-  },
-  yAxis: {
-    title: { text: 'Energy (kWh)' }
-  },
-  credits: { enabled: false }
-});
-</script>
+<script src="charts/temp.js"></script>
+<script src="charts/flow.js"></script>
+<script src="charts/energy.js"></script>
+
 </html>
