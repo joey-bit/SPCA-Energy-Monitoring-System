@@ -9,75 +9,9 @@ copies or substantial portions of the Software. -->
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/ca98015c02.js" crossorigin="anonymous"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <style>
-    body {
-      min-width: 310px;
-      max-width: 1000 auto;
-      height: 400px;
-      margin: 0 auto;
-      background-color: rgb(67, 70, 207);
-    }
-
-    h2 {
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-      font-size: 2.5rem;
-      text-align: center;
-      color: #fff;
-    }
-
-    h3 {
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-      font-size: 1.5rem;
-      text-align: center;
-      color: #fff;
-    }
-
-    .mytabs {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 1000px;
-      margin: 50px auto;
-      padding: 25px;
-    }
-
-    .mytabs input[type="radio"] {
-      display: none;
-    }
-
-    .mytabs label {
-      padding: 25px;
-      background: #e6a433;
-      font-weight: bold;
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
-
-    .mytabs .tab {
-      width: 100%;
-      padding: 20px;
-      background: #fff;
-      order: 1;
-      display: none;
-    }
-
-    .mytabs .tab h2 {
-      font-size: 3em;
-    }
-
-    .mytabs input[type='radio']:checked+label+.tab {
-      display: block;
-    }
-
-    .mytabs input[type="radio"]:checked+label {
-      background: #fff;
-    }
-    .img-center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 50%;
-    }
-  </style>
 </head>
 
 <body>
@@ -86,43 +20,89 @@ copies or substantial portions of the Software. -->
   <h3>Realtime Data</h3>
   <div class="mytabs">
     <input type="radio" id="tabtemps" name="rt-tab-control" checked="checked">
-    <label for="tabtemps">Temperatures</label>
-    <div class="tab">
-      <div id="chart-temperature" class="container"></div> <br>
-    </div>
+    <label for="tabtemps"><i class="fa fa-thermometer" style="font-size: x-large"></i></label>
+    <section class="tab">
+      <div id="chart-temperature-rt" class="container"></div> <br>
+      <h3>Historical Data</h3>
+      <div class="subtabs">
+        <input type="radio" id="tab-temp-hourly" name="hist-temp-tab-control" checked="checked">
+        <label for="tab-temp-hourly">Hourly</label>
+        <div class="tab">
+          <!-- <div id="chart-temperature-hour" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-temp-daily" name="hist-temp-tab-control">
+        <label for="tab-temp-daily">Daily</label>
+        <div class="tab">
+          <!-- <div id="chart-temperature-day" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-temp-monthly" name="hist-temp-tab-control">
+        <label for="tab-temp-monthly">Monthly</label>
+        <div class="tab">
+          <!-- <div id="chart-temperature-month" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-temp-annual" name="hist-temp-tab-control">
+        <label for="tab-temp-annual">Annually</label>
+        <div class="tab">
+          <!-- <div id="chart-temperature-annual" class="container"></div> <br> -->
+        </div>
+      </div>
+    </section>
     <input type="radio" id="tabenergy" name="rt-tab-control">
-    <label for="tabenergy">Energy</label>
-    <div class="tab">
-      <div id="chart-energy" class="container"></div> <br>
-    </div>
+    <label for="tabenergy"><i class="fa-solid fa-bolt-lightning" style="font-size: x-large"></i></label>
+    <section class="tab">
+      <div id="chart-energy-rt" class="container"></div> <br>
+      <h3>Historical Data</h3>
+      <div class="subtabs">
+        <input type="radio" id="tab-energy-hourly" name="hist-energy-tab-control" checked="checked">
+        <label for="tab-energy-hourly">Hourly</label>
+        <div class="tab">
+          <!-- <div id="chart-energy-hour" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-energy-daily" name="hist-energy-tab-control">
+        <label for="tab-energy-daily">Daily</label>
+        <div class="tab">
+          <!-- <div id="chart-energy-day" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-energy-monthly" name="hist-energy-tab-control">
+        <label for="tab-energy-monthly">Monthly</label>
+        <div class="tab">
+          <!-- <div id="chart-energy-month" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-energy-annual" name="hist-energy-tab-control">
+        <label for="tab-energy-annual">Annually</label>
+        <div class="tab">
+          <!-- <div id="chart-energy-annual" class="container"></div> <br> -->
+        </div>
+      </div>
+    </section>
     <input type="radio" id="tabflow" name="rt-tab-control">
-    <label for="tabflow">Hot Water Flow</label>
-    <div class="tab">
-      <div id="chart-flow" class="container"></div> <br>
-    </div>
-  </div>
-  <h3>Historical Data</h3>
-  <div class="mytabs">
-    <input type="radio" id="hourly" name="hist-tab-control" checked="checked">
-    <label for="hourly">Hourly</label>
-    <div class="tab">
-      <!-- <div id="chart-temperature-hist" class="container"></div> <br> -->
-    </div>
-    <input type="radio" id="daily" name="hist-tab-control">
-    <label for="daily">Daily</label>
-    <div class="tab">
-      <!-- <div id="chart-energy-hist" class="container"></div> <br> -->
-    </div>
-    <input type="radio" id="monthly" name="hist-tab-control">
-    <label for="monthly">Monthly</label>
-    <div class="tab">
-      <!-- <div id="chart-flow-hist" class="container"></div> <br> -->
-    </div>
-    <input type="radio" id="annual" name="hist-tab-control">
-    <label for="annual">Annually</label>
-    <div class="tab">
-      <!-- <div id="chart-flow-hist" class="container"></div> <br> -->
-    </div>
+    <label for="tabflow"><i class="fa-solid fa-faucet-drip" style="font-size: x-large"></i></label>
+    <section class="tab">
+      <div id="chart-flow-rt" class="container"></div> <br>
+      <h3>Historical Data</h3>
+      <div class="subtabs">
+        <input type="radio" id="tab-flow-hourly" name="hist-flow-tab-control" checked="checked">
+        <label for="tab-flow-hourly">Hourly</label>
+        <div class="tab">
+          <!-- <div id="chart-flow-annual" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-flow-daily" name="hist-flow-tab-control">
+        <label for="tab-flow-daily">Daily</label>
+        <div class="tab">
+          <!-- <div id="chart-flow-day" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-flow-monthly" name="hist-flow-tab-control">
+        <label for="tab-flow-monthly">Monthly</label>
+        <div class="tab">
+          <!-- <div id="chart-flow-month" class="container"></div> <br> -->
+        </div>
+        <input type="radio" id="tab-flow-annual" name="hist-flow-tab-control">
+        <label for="tab-flow-annual">Annually</label>
+        <div class="tab">
+          <!-- <div id="chart-flow-annual" class="container"></div> <br> -->
+        </div>
+      </div>
+    </section>
   </div>
 </body>
 <script src="charts/temp.js"></script>

@@ -2,13 +2,11 @@
 #include <WiFi.h>
 #include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
-#include <OneWire.h>
+#include <Sensors.h>
 
 AsyncWebServer server(80);
 const char* SSID = "Peachy2.4";
 const char* PASSWORD = "Friendly";
-
-
 
 void setup() {
   Serial.begin(115200);
@@ -27,6 +25,12 @@ void setup() {
   });
   server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/csv", "10,20,30,40,50");
+  });
+  server.on("/energy", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/csv", "100,200");
+  });
+  server.on("/flow", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", "8.4");
   });
   server.begin();
 }
