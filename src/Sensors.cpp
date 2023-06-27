@@ -89,3 +89,24 @@ void tempProbe::readAllProbes()
         updateAnually = false;
     }
 }
+
+String tempProbe::getRealTimeData()
+{
+    String data = "";
+    for(auto &probe : probes)
+    {
+        data += String(static_cast<float>(probe.realTime.at(indexRealTime))/100.0) + ",";
+        
+    }
+    return data;
+}
+
+String tempProbe::getHourlyData()
+{
+    String data = "";
+    for(auto &probe : probes)
+    {
+        data += String(static_cast<float>(probe.hourly.at(indexHourly))/100.0) + ",";
+    }
+    return data;
+}

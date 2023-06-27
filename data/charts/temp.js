@@ -63,6 +63,6 @@ setInterval(function () {
             }
         }
     };
-    xhttp.open("GET", "/temperature", true); //Open the data request
+    xhttp.open("GET", "/temperature-rt", true); //Open the data request
     xhttp.send();   //Send the data request
 }, 3000);  //Repeat every 3 seconds

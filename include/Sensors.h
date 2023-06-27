@@ -9,6 +9,15 @@ const uint8_t HYBRID_ADDR[8] = {0x28, 0x3C, 0x7D, 0x7B, 0x07, 0x00, 0x00, 0x9A};
 const uint8_t SOURCE_ADDR[8] = {0x28, 0x3C, 0x7D, 0x7B, 0x07, 0x00, 0x00, 0x9A};
 const uint8_t HOT_ADDR[8] = {0x28, 0x3C, 0x7D, 0x7B, 0x07, 0x00, 0x00, 0x9A};
 
+enum probeType
+{
+    GLYCOL,
+    PREHEAT,
+    HYBRID,
+    SOURCE,
+    HOT
+};
+
 typedef struct tempProbe {
     tempProbe(const uint8_t* address);
        
@@ -24,7 +33,11 @@ typedef struct tempProbe {
     static bool updateHourly, updateDaily, updateMonthly, updateAnually;
 
     static void readAllProbes();
+    static String getRealTimeData();
+    static String getHourlyData();
+    static String getHistoricalData();
+    static void updateCSV();
     static OneWire oneWire;
     static DallasTemperature sensors;
-    static std::array<tempProbe, 5> probes;
-}tempSensor;
+    static std::array<tempProbe, 5> probes; //Order of probes folllows the order of the enum above
+}tempProbe;

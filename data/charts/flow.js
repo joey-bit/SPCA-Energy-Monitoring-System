@@ -35,6 +35,6 @@ setInterval(function () {
             }
         }
     };
-    xhttp.open("GET", "/flow", true);
+    xhttp.open("GET", "/flow-rt", true);
     xhttp.send();
 }, 3000);

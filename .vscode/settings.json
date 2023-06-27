@@ -3,6 +3,7 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "numeric": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "string": "cpp"
     }
 }

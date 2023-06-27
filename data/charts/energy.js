@@ -43,6 +43,19 @@ setInterval(function () {
             }
         }
     };
-    xhttp.open("GET", "/energy", true);
+    xhttp.open("GET", "/energy-rt", true);
     xhttp.send();
 }, 3000);
+
+function fillHistorical() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) { //When ready to receive
+        var x = (new Date()).getTime(), //Current time
+            y = this.responseText.split(',').map(Number); //Get the data as an array of strings like "1,2,3,4,5"
+        for (let i = 0; i < 5; i++) {
+            chartTempRT.series[i].setData(y[i]);
+        }
+    }
+    }
+}
