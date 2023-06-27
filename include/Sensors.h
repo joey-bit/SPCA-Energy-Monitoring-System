@@ -1,5 +1,6 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <SPIFFS.h>
 
 #define ONE_WIRE_BUS 15
 

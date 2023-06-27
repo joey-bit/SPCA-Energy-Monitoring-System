@@ -18,6 +18,8 @@ tempProbe::tempProbe(const uint8_t *address)
 OneWire tempProbe::oneWire(ONE_WIRE_BUS);
 DallasTemperature tempProbe::sensors(&oneWire);
 std::array<tempProbe, 5> tempProbe::probes = {tempProbe(GLYCOL_ADDR), tempProbe(PREHEAT_ADDR), tempProbe(HYBRID_ADDR), tempProbe(SOURCE_ADDR), tempProbe(HOT_ADDR)};
+short tempProbe::indexRealTime = 0, tempProbe::indexHourly = 0, tempProbe::indexDaily = 0, tempProbe::indexMonthly = 0, tempProbe::indexAnually = 0;
+bool tempProbe::updateHourly = false, tempProbe::updateDaily = false, tempProbe::updateMonthly = false, tempProbe::updateAnually = false;
 
 void tempProbe::readAllProbes()
 {
@@ -50,6 +52,7 @@ void tempProbe::readAllProbes()
         {
             probe.daily.at(indexDaily) = static_cast<short>(std::accumulate(probe.hourly.begin(), probe.hourly.end(), 0.0) / probe.hourly.size());
             probe.hourly.fill(0);
+            updateCSV();
         }
         indexDaily++;
         if(indexDaily == 24)
@@ -98,6 +101,7 @@ String tempProbe::getRealTimeData()
         data += String(static_cast<float>(probe.realTime.at(indexRealTime))/100.0) + ",";
         
     }
+    data.remove(data.length() - 1); //remove the final comma
     return data;
 }
 
@@ -108,5 +112,32 @@ String tempProbe::getHourlyData()
     {
         data += String(static_cast<float>(probe.hourly.at(indexHourly))/100.0) + ",";
     }
+    data.remove(data.length() - 1); //remove the final comma
     return data;
+}
+
+String tempProbe::getHistoricalData()
+{
+
+}
+
+void tempProbe::updateCSV()
+{
+    tm timeinfo;
+    char buffer[50];
+    if(!getLocalTime(&timeinfo)) Serial.println("Failed to obtain time");
+    //Add timestamp to data in the form YYYY-Month-DD HH:MM:SS
+    sprintf(buffer, "%Y-%B-%d %H:%M:%S", &timeinfo);
+    String timestamp = buffer;
+    timestamp.trim();
+    String data = "";
+    data += timestamp + ",";
+    for(auto &probe : probes)
+    {
+        data += String(static_cast<float>(probe.daily.at(indexDaily))/100.0) + ",";
+    }
+    data.remove(data.length() - 1); //remove the final comma
+    File file = SPIFFS.open("/historical_data.csv", FILE_APPEND);
+    file.println(data);
+    file.close();
 }

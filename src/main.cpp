@@ -36,10 +36,10 @@ void setup() {
     request->send(SPIFFS, "/index.html");
   });
   server.on("/temperature-rt", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/csv", tempProbe::getRealTimeData().c_str());
+    request->send_P(200, "text/plain", tempProbe::getRealTimeData().c_str());
   });
   server.on("/temperature-hr", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/csv", tempProbe::getHourlyData().c_str());
+    request->send_P(200, "text/plain", tempProbe::getHourlyData().c_str());
   });
   server.on("/temperature-hist", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/csv", tempProbe::getHistoricalData().c_str());
