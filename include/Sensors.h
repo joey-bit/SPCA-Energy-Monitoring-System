@@ -1,6 +1,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <SPIFFS.h>
+#include <map>
 
 #define ONE_WIRE_BUS 15
 #define FLOW_METER_PIN 14
@@ -17,18 +18,15 @@ typedef struct tempProbe {
     std::array<short , 20> realTime;
     std::array<short , 30> hourly;
     std::array<short , 24> daily;
-    std::array<short , 31> monthly;
-    std::array<short , 12> anually;
 
     uint8_t uniqueAddress[8];
 
-    static short indexRealTime, indexHourly, indexDaily, indexMonthly, indexAnually;
-    static bool updateHourly, updateDaily, updateMonthly, updateAnually;
+    static short indexRealTime, indexHourly, indexDaily;
+    static bool updateHourly, updateDaily;
 
     static void readAllProbes();
     static String getRealTimeData();
     static String getHourlyData();
-    static String getHistoricalData();
     static void updateCSV();
     static OneWire oneWire;
     static DallasTemperature sensors;
@@ -36,8 +34,11 @@ typedef struct tempProbe {
 }tempProbe;
 
 typedef struct flowMeter {
+    flowMeter();
     uint16_t pulses;
-    float flowRate;
     static flowMeter instance;
     void readFlowMeter();
+    std::array<short , 20> realTime;    //Stored in L/s
+    std::array<short , 30> hourly;      //Integration of rate, stored in L
+    std::array<short , 24> daily;       //Integration of rate, stored in L
 }flowMeter;
