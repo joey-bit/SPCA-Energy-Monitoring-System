@@ -141,3 +141,19 @@ void tempProbe::updateCSV()
     file.println(data);
     file.close();
 }
+
+flowMeter flowMeter::instance{FLOW_METER_PIN};
+
+void IRAM_ATTR pulseCounter()
+{
+    flowMeter::instance.pulses++;
+}
+
+void flowMeter::readFlowMeter() {
+    instance.pulses = 0;
+    instance.flowRate = 0;
+    attachInterrupt(FLOW_METER_PIN, pulseCounter, FALLING);
+    delay(1000);
+    detachInterrupt(FLOW_METER_PIN);
+    instance.flowRate = instance.pulses/ 5.5;
+}

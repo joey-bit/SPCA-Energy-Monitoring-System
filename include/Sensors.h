@@ -3,6 +3,7 @@
 #include <SPIFFS.h>
 
 #define ONE_WIRE_BUS 15
+#define FLOW_METER_PIN 14
 
 const uint8_t GLYCOL_ADDR[8] = {0x28, 0x59, 0x5C, 0x97, 0x94, 0x12, 0x03, 0x5C};
 const uint8_t PREHEAT_ADDR[8] = {0x28, 0x02, 0x50, 0x97, 0x94, 0x05, 0x03, 0x29};
@@ -33,3 +34,10 @@ typedef struct tempProbe {
     static DallasTemperature sensors;
     static std::array<tempProbe, 5> probes; //Order of probes folllows the order of the enum above
 }tempProbe;
+
+typedef struct flowMeter {
+    uint16_t pulses;
+    float flowRate;
+    static flowMeter instance;
+    void readFlowMeter();
+}flowMeter;
