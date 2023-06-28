@@ -27,7 +27,7 @@ setInterval(function () {
         if (this.readyState == 4 && this.status == 200) {
             var x = (new Date()).getTime(),
                 y = parseFloat(this.responseText);
-            if (chartFlowRT.series.data.length > 20) {
+            if (chartFlowRT.series[0].data.length > 20) {
                 chartFlowRT.series[0].addPoint([x, y], true, true, true);
             } else {
                 chartFlowRT.series[0].addPoint([x, y], true, false, true);
@@ -67,7 +67,7 @@ setInterval(function () {
         if (this.readyState == 4 && this.status == 200) {
             var x = (new Date()).getTime(),
                 y = parseFloat(this.responseText);
-            if (chartFlowRT.series.data.length > 30) {
+            if (chartFlowRT.series[0].data.length > 30) {
                 chartFlowRT.series[0].addPoint([x, y], true, true, true);
             } else {
                 chartFlowRT.series[0].addPoint([x, y], true, false, true);

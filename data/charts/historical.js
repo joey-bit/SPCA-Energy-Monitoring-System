@@ -24,9 +24,9 @@ function extractHistorical() {
                 var time = Date.parse(columns[0]);
                 chartTempDay.series[colNum-1].addPoint([time, y], true, false, true);
             }
-            var y = parseFloat(columns[6]);
-            var time = Date.parse(columns[0]);
-            chartFlowDay.addPoint([time, y], true, false, true);
+            var flow_y = parseFloat(columns[6]);
+            var flow_time = Date.parse(columns[0]);
+            chartFlowDay.series[0].addPoint([flow_time, flow_y], true, false, true);
         }
     }
 }

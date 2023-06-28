@@ -45,22 +45,26 @@ void setup() {
   server.on("/temperature-hr", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/plain", tempProbe::getHourlyData().c_str());
   });
+  server.on("/flow-rt", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", String(static_cast<float>(flowMeter::instance.realTime.at(tempProbe::indexRealTime))/100.0).c_str());
+  });
+  server.on("/flow-hr", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", String(static_cast<float>(flowMeter::instance.hourly.at(tempProbe::indexHourly))/100.0).c_str());
+  });
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
   });
+
   // server.on("/energy-rt", HTTP_GET, [](AsyncWebServerRequest *request){
   //   request->send_P(200, "text/csv", "100,200");
   // });
-  // server.on("/flow-rt", HTTP_GET, [](AsyncWebServerRequest *request){
-  //   request->send_P(200, "text/plain", "8.4");
-  //});
+  
   server.begin();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //flowMeter::instance.readFlowMeter(); 
-  //tempProbe::readAllProbes();
-  tempProbe::updateCSV();
+  flowMeter::instance.readFlowMeter(); 
+  tempProbe::readAllProbes();
   delay(4900);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
 }
