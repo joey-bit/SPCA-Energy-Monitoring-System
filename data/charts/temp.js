@@ -1,3 +1,4 @@
+//Code that creates a chart of realtime temperature data
 var chartTempRT = new Highcharts.Chart({
     chart: { renderTo: 'chart-temperature-rt' },
     title: { text: 'System Temperatures' },
@@ -11,7 +12,13 @@ var chartTempRT = new Highcharts.Chart({
         {
             type: "line",
             showInLegend: true,
-            name: "Hot Water",
+            name: "Solar Preheat",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Room Ambient",
             data: []
         },
         {
@@ -23,13 +30,7 @@ var chartTempRT = new Highcharts.Chart({
         {
             type: "line",
             showInLegend: true,
-            name: "Solar Preheat",
-            data: []
-        },
-        {
-            type: "line",
-            showInLegend: true,
-            name: "Hybrid Tank",
+            name: "Hot Water",
             data: []
         },
     ],
@@ -48,6 +49,7 @@ var chartTempRT = new Highcharts.Chart({
     },
     credits: { enabled: false }
 });
+//Function that allows the chart to update every 6 seconds
 setInterval(function () {
     var xhttp = new XMLHttpRequest(); //Create a data request
     xhttp.onreadystatechange = function () { //Callback function
@@ -65,4 +67,156 @@ setInterval(function () {
     };
     xhttp.open("GET", "/temperature-rt", true); //Open the data request
     xhttp.send();   //Send the data request
-}, 3000);  //Repeat every 3 seconds
+}, 6000);  //Repeat every 6 seconds
+
+//Code that creates a chart of historical temperature data (2 minute data)
+var chartTempHR = new Highcharts.Chart({
+    chart: { renderTo: 'chart-temperature-hour' },
+    title: { text: 'Average Hourly System Temperatures' },
+    series: [
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Glycol",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Solar Preheat",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Room Ambient",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Hot Water",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Cold Water",
+            data: []
+        },
+    ],
+    plotOptions: {
+        line: {
+            animation: false,
+            dataLabels: { enabled: true }
+        },
+    },
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { second: '%H:%M' }
+    },
+    yAxis: {
+        title: { text: 'Temperature (Celsius)' }
+    },
+    credits: { enabled: false }
+});
+//Function that allows the chart to update every 2 minutes
+setInterval(function () {
+    var xhttp = new XMLHttpRequest(); //Create a data request
+    xhttp.onreadystatechange = function () { //Callback function
+        if (this.readyState == 4 && this.status == 200) { //When ready to receive
+            var x = (new Date()).getTime(), //Current time
+                y = this.responseText.split(',').map(Number); //Get the data as an array of floats
+            for (let i = 0; i < 5; i++) {
+                if (chartTempHR.series[i].data.length > 30) { //If there are more than 30 points
+                    chartTempHR.series[i].addPoint([x, y[i]], true, true, true); //Add a point and shift
+                } else {
+                    chartTempHR.series[i].addPoint([x, y[i]], true, false, true); //Add a point
+                }
+            }
+        }
+    };
+    xhttp.open("GET", "/temperature-hr", true); //Open the data request
+    xhttp.send();   //Send the data request
+}, 120000);  //Repeat every 2 minutes
+
+var chartTempDay = new Highcharts.Chart({
+    chart: { renderTo: 'chart-temperature-day' },
+    title: { text: 'Average Daily System Temperatures' },
+    series: [
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Glycol",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Solar Preheat",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Room Ambient",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Cold Water",
+            data: []
+        },
+        {
+            type: "line",
+            showInLegend: true,
+            name: "Hot Water",
+            data: []
+        }
+    ],
+    plotOptions: {
+        line: {
+            animation: false,
+            dataLabels: { enabled: false }
+        },
+    },
+    xAxis: {
+        title: { text: 'Time' },
+        type: 'datetime',
+    },
+    yAxis: {
+        title: { text: 'Temperature (Celsius)' }
+    },
+    credits: { enabled: false }
+});
+
+document.addEventListener('DOMContentLoaded', getDailyTemp);
+function getDailyTemp() {
+    var xhttp = new XMLHttpRequest(); //Create a data request
+    xhttp.onreadystatechange = handleStateChange;
+    xhttp.open("GET", "/temperature-day"); //Open the data request
+    xhttp.send();   //Send the data request
+
+    function handleStateChange() { //Callback function 
+        if (this.readyState == 4 && this.status == 200) { //When ready to receive
+            extractData(this.responseText);
+        }
+    }
+    function extractData(data) {
+        var rows = data.split("\n");
+        let rowNum = rows.length-24;
+        if(rowNum < 1) 
+        {
+            rowNum = 1;
+        }
+        for (rowNum; rowNum < rows.length; rowNum++) {
+            var columns = rows[rowNum].split(',');
+            for (let colNum = 1; colNum < 6; colNum++) {
+                var y = parseFloat(columns[colNum]);
+                var time = Date.parse(columns[0]);
+                chartTempDay.series[colNum-1].addPoint([time, y], true, false, true);
+            }
+        }
+    }
+}

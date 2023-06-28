@@ -9,31 +9,31 @@ copies or substantial portions of the Software. -->
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://kit.fontawesome.com/ca98015c02.js" crossorigin="anonymous"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
 </head>
 
 <body>
-  <header><img src = "logo.png" alt = "BCSPCA Logo" class="img-center" ></header>
+  <header><a href="https://spca.bc.ca/locations/sunshine-coast/"><img src = "logo.png" alt = "BCSPCA Logo" class="img-center" ></a></header>
   <h2>Hot Water Monitoring System</h2>
-  <h3>Realtime Data</h3>
   <div class="mytabs">
     <input type="radio" id="tabtemps" name="rt-tab-control" checked="checked">
     <label for="tabtemps"><i class="fa fa-thermometer" style="font-size: x-large"></i></label>
     <section class="tab">
+      <h3>Realtime Data</h3>
       <div id="chart-temperature-rt" class="container"></div> <br>
       <h3>Historical Data</h3>
       <div class="subtabs">
         <input type="radio" id="tab-temp-hourly" name="hist-temp-tab-control" checked="checked">
         <label for="tab-temp-hourly">Hourly</label>
         <div class="tab">
-          <!-- <div id="chart-temperature-hour" class="container"></div> <br> -->
+          <div id="chart-temperature-hour" class="container"></div>
         </div>
         <input type="radio" id="tab-temp-daily" name="hist-temp-tab-control">
         <label for="tab-temp-daily">Daily</label>
         <div class="tab">
-          <!-- <div id="chart-temperature-day" class="container"></div> <br> -->
+          <div id="chart-temperature-day" class="container"></div>
         </div>
         <input type="radio" id="tab-temp-monthly" name="hist-temp-tab-control">
         <label for="tab-temp-monthly">Monthly</label>
@@ -50,6 +50,7 @@ copies or substantial portions of the Software. -->
     <input type="radio" id="tabenergy" name="rt-tab-control">
     <label for="tabenergy"><i class="fa-solid fa-bolt-lightning" style="font-size: x-large"></i></label>
     <section class="tab">
+      <h3>Realtime Data</h3>
       <div id="chart-energy-rt" class="container"></div> <br>
       <h3>Historical Data</h3>
       <div class="subtabs">
@@ -78,6 +79,7 @@ copies or substantial portions of the Software. -->
     <input type="radio" id="tabflow" name="rt-tab-control">
     <label for="tabflow"><i class="fa-solid fa-faucet-drip" style="font-size: x-large"></i></label>
     <section class="tab">
+      <h3>Realtime Data</h3>
       <div id="chart-flow-rt" class="container"></div> <br>
       <h3>Historical Data</h3>
       <div class="subtabs">
@@ -105,13 +107,13 @@ copies or substantial portions of the Software. -->
     </section>
   </div>
   <div class="download-button" style="text-align: center;">
-    <a href="/data/historical.csv" download>
+    <a href="historical_data.csv" download>
       <button> Download Historical Data </button>
   </a>
   </div>
 </body>
 <script src="charts/temp.js"></script>
-<script src="charts/flow.js"></script>
-<script src="charts/energy.js"></script>
+<!-- <script src="charts/flow.js"></script>
+<script src="charts/energy.js"></script> -->
 
 </html>
