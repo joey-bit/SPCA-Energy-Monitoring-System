@@ -25,6 +25,7 @@ void tempProbe::readAllProbes()
         probe.realTime[indexRealTime] = static_cast<short>(temp*100);
         Serial.printf("Reading %.2f, storing %d at index %d\n", temp, probe.realTime[indexRealTime], indexRealTime);
     } 
+    flowMeter::instance.readFlowMeter();
     indexRealTime++;  
     if(indexRealTime == 20) 
     {
@@ -37,7 +38,7 @@ void tempProbe::readAllProbes()
         {
             probe.hourly[indexHourly] = static_cast<short>(std::accumulate(probe.realTime.begin(), probe.realTime.end(), 0.0) / probe.realTime.size());
         }
-        flowMeter::instance.hourly[indexHourly] = static_cast<short>(std::accumulate(flowMeter::instance.realTime.begin(), flowMeter::instance.realTime.end(), 0.0)*6);
+        flowMeter::instance.hourly[indexHourly] = static_cast<short>(std::accumulate(flowMeter::instance.realTime.begin(), flowMeter::instance.realTime.end(), 0.0)/10.0);
         indexHourly++;
         if(indexHourly == 60)
         {
@@ -73,8 +74,7 @@ String tempProbe::getRealTimeData()
         }
         catch(const std::out_of_range& oor)
         {
-            Serial.println("Out of range");
-            data += String(probe.realTime.at(indexRealTime)) + ",";
+            data += String(probe.realTime.at(19)) + ",";    //We are on index 0, so we want the last element of the array
         }
         
     }
@@ -93,8 +93,7 @@ String tempProbe::getHourlyData()
         }
         catch(const std::out_of_range& oor)
         {
-            Serial.println("Out of range");
-            data += String(probe.hourly.at(indexHourly)) + ",";
+            data += String(probe.hourly.at(19)) + ",";   //We are on index 0, so we want the last element of the array
         }
     }
     data.remove(data.length() - 1); //remove the final comma
@@ -142,7 +141,6 @@ flowMeter::flowMeter()
     realTime.fill(0);
     hourly.fill(0);
     daily.fill(0);
-    pinMode(FLOW_METER_PIN, INPUT_PULLUP);
 }
 
 void IRAM_ATTR pulseCounter()
@@ -155,5 +153,7 @@ void flowMeter::readFlowMeter() {
     attachInterrupt(FLOW_METER_PIN, pulseCounter, FALLING);
     delay(1000);
     detachInterrupt(FLOW_METER_PIN);
-    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100/60);
+    Serial.printf("Pulses: %d\n", instance.pulses);
+    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);
+    Serial.printf("Flow meter reading: %.3f L/min\n", static_cast<float>(instance.realTime.at(tempProbe::indexRealTime))/100.0);
 }

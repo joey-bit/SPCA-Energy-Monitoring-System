@@ -54,19 +54,15 @@ void setup() {
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
   });
-
-  // server.on("/energy-rt", HTTP_GET, [](AsyncWebServerRequest *request){
-  //   request->send_P(200, "text/csv", "100,200");
-  // });
   
   server.begin();
+  pinMode(FLOW_METER_PIN, INPUT_PULLUP);
   tempProbe::sensors.begin();
   printf("Found %d sensors\n", tempProbe::sensors.getDeviceCount());
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  flowMeter::instance.readFlowMeter(); 
   tempProbe::readAllProbes();
   delay(4900);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
 }
