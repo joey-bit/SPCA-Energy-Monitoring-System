@@ -60,6 +60,8 @@ void setup() {
   // });
   
   server.begin();
+  tempProbe::sensors.begin();
+  printf("Found %d sensors\n", tempProbe::sensors.getDeviceCount());
 }
 
 void loop() {

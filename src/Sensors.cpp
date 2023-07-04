@@ -2,13 +2,10 @@
 #include <numeric>
 
 extern tm timeData;
-tempProbe::tempProbe(const uint8_t *address)
+
+tempProbe::tempProbe(const uint8_t* address)
 {
-    for (auto index : uniqueAddress)
-    {
-        index = *address;
-        address++;
-    }
+    uniqueAddress = address;
     realTime.fill(0);
     hourly.fill(0);
     daily.fill(0);
@@ -23,7 +20,11 @@ bool tempProbe::updateHourly = false, tempProbe::updateDaily = false;
 void tempProbe::readAllProbes()
 {
     sensors.requestTemperatures();
-    for (auto &probe : probes) probe.realTime.at(indexRealTime) = static_cast<short>(sensors.getTempC(probe.uniqueAddress));
+    for (auto &probe : probes){
+        auto temp = probe.sensors.getTempC(probe.uniqueAddress);
+        probe.realTime[indexRealTime] = static_cast<short>(temp*100);
+        Serial.printf("Reading %.2f, storing %d at index %d\n", temp, probe.realTime[indexRealTime], indexRealTime);
+    } 
     indexRealTime++;  
     if(indexRealTime == 20) 
     {
@@ -34,9 +35,9 @@ void tempProbe::readAllProbes()
     {
         for(auto &probe : probes) 
         {
-            probe.hourly.at(indexHourly) = static_cast<short>(std::accumulate(probe.realTime.begin(), probe.realTime.end(), 0.0) / probe.realTime.size());
+            probe.hourly[indexHourly] = static_cast<short>(std::accumulate(probe.realTime.begin(), probe.realTime.end(), 0.0) / probe.realTime.size());
         }
-        flowMeter::instance.hourly.at(indexHourly) = static_cast<short>(std::accumulate(flowMeter::instance.realTime.begin(), flowMeter::instance.realTime.end(), 0.0)*6);
+        flowMeter::instance.hourly[indexHourly] = static_cast<short>(std::accumulate(flowMeter::instance.realTime.begin(), flowMeter::instance.realTime.end(), 0.0)*6);
         indexHourly++;
         if(indexHourly == 60)
         {
@@ -51,7 +52,7 @@ void tempProbe::readAllProbes()
         {
             probe.daily.at(indexDaily) = static_cast<short>(std::accumulate(probe.hourly.begin(), probe.hourly.end(), 0.0) / probe.hourly.size());
         }
-        flowMeter::instance.daily.at(indexDaily) = static_cast<short>(std::accumulate(flowMeter::instance.hourly.begin(), flowMeter::instance.hourly.end(), 0.0));
+        flowMeter::instance.daily[indexDaily] = static_cast<short>(std::accumulate(flowMeter::instance.hourly.begin(), flowMeter::instance.hourly.end(), 0.0));
         updateCSV();
         indexDaily++;
         if(indexDaily == 24)
@@ -67,10 +68,18 @@ String tempProbe::getRealTimeData()
     String data = "";
     for(auto &probe : probes)
     {
-        data += String(static_cast<float>(probe.realTime.at(indexRealTime))/100.0) + ",";
+        try{
+            data += String(probe.realTime.at(indexRealTime-1)) + ",";
+        }
+        catch(const std::out_of_range& oor)
+        {
+            Serial.println("Out of range");
+            data += String(probe.realTime.at(indexRealTime)) + ",";
+        }
         
     }
     data.remove(data.length() - 1); //remove the final comma
+    printf("Sending to HTML: %s\n", data.c_str());
     return data;
 }
 
@@ -79,7 +88,14 @@ String tempProbe::getHourlyData()
     String data = "";
     for(auto &probe : probes)
     {
-        data += String(static_cast<float>(probe.hourly.at(indexHourly))/100.0) + ",";
+        try{
+            data += String(probe.hourly.at(indexHourly-1)) + ",";
+        }
+        catch(const std::out_of_range& oor)
+        {
+            Serial.println("Out of range");
+            data += String(probe.hourly.at(indexHourly)) + ",";
+        }
     }
     data.remove(data.length() - 1); //remove the final comma
     return data;

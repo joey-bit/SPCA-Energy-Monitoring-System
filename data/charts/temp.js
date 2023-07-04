@@ -57,9 +57,9 @@ setInterval(function () {
                 y = this.responseText.split(',').map(Number); //Get the data as an array of floats
             for (let i = 0; i < 5; i++) {
                 if (chartTempRT.series[i].data.length > 20) { //If there are more than 20 points
-                    chartTempRT.series[i].addPoint([x, y[i]], true, true, true); //Add a point and shift
+                    chartTempRT.series[i].addPoint([x, y[i]/100], true, true, true); //Add a point and shift
                 } else {
-                    chartTempRT.series[i].addPoint([x, y[i]], true, false, true); //Add a point
+                    chartTempRT.series[i].addPoint([x, y[i]/100], true, false, true); //Add a point
                 }
             }
         }
@@ -127,9 +127,9 @@ setInterval(function () {
                 y = this.responseText.split(',').map(Number); //Get the data as an array of floats
             for (let i = 0; i < 5; i++) {
                 if (chartTempHR.series[i].data.length > 30) { //If there are more than 30 points
-                    chartTempHR.series[i].addPoint([x, y[i]], true, true, true); //Add a point and shift
+                    chartTempHR.series[i].addPoint([x, y[i]/100], true, true, true); //Add a point and shift
                 } else {
-                    chartTempHR.series[i].addPoint([x, y[i]], true, false, true); //Add a point
+                    chartTempHR.series[i].addPoint([x, y[i]/100], true, false, true); //Add a point
                 }
             }
         }
