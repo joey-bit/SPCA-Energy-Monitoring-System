@@ -23,7 +23,7 @@ void tempProbe::readAllProbes()
     for (auto &probe : probes){
         auto temp = probe.sensors.getTempC(probe.uniqueAddress);
         probe.realTime[indexRealTime] = static_cast<short>(temp*100);
-        Serial.printf("Reading %.2f, storing %d at index %d\n", temp, probe.realTime[indexRealTime], indexRealTime);
+        //Serial.printf("Reading %.2f, storing %d at index %d\n", temp, probe.realTime[indexRealTime], indexRealTime);
     } 
     flowMeter::instance.readFlowMeter();
     indexRealTime++;  
@@ -153,7 +153,7 @@ void flowMeter::readFlowMeter() {
     attachInterrupt(FLOW_METER_PIN, pulseCounter, FALLING);
     delay(1000);
     detachInterrupt(FLOW_METER_PIN);
-    Serial.printf("Pulses: %d\n", instance.pulses);
+    //Serial.printf("Pulses: %d\n", instance.pulses);
     instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);
-    Serial.printf("Flow meter reading: %.3f L/min\n", static_cast<float>(instance.realTime.at(tempProbe::indexRealTime))/100.0);
+    //Serial.printf("Flow meter reading: %.3f L/min\n", static_cast<float>(instance.realTime.at(tempProbe::indexRealTime))/100.0);
 }

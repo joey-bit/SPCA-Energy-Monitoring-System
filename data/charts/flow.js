@@ -14,7 +14,9 @@ var chartFlowRT = new Highcharts.Chart({
         },
     },
     xAxis: {
+        title: { text: 'Time' },
         type: 'datetime',
+        dateTimeLabelFormats: { second: '%H:%M:%S' }
     },
     yAxis: {
         title: { text: 'Flow (L/min)' }
@@ -44,7 +46,7 @@ var chartFlowHR = new Highcharts.Chart({
     series: [{
         type: "line",
         showInLegend: true,
-        name: "Hot Water Flow",
+        name: "Hot Water Usage",
         data: []
     }],
     plotOptions: {
@@ -54,10 +56,12 @@ var chartFlowHR = new Highcharts.Chart({
         },
     },
     xAxis: {
+        title: { text: 'Time' },
         type: 'datetime',
+        dateTimeLabelFormats: { minute: '%H:%M' }
     },
     yAxis: {
-        title: { text: 'Flow (L/min)' }
+        title: { text: 'Water Used (L)' }
     },
     credits: { enabled: false }
 });
@@ -84,7 +88,7 @@ var chartFlowDay = new Highcharts.Chart({
     series: [{
         type: "line",
         showInLegend: true,
-        name: "Hot Water Flow",
+        name: "Hot Water Usage",
         data: []
     }],
     plotOptions: {
@@ -94,10 +98,12 @@ var chartFlowDay = new Highcharts.Chart({
         },
     },
     xAxis: {
+        title: { text: 'Time' },
         type: 'datetime',
+        dateTimeLabelFormats: { minute: '%H:%M' }
     },
     yAxis: {
-        title: { text: 'Flow (L/min)' }
+        title: { text: 'Water Used (L)' }
     },
     credits: { enabled: false }
 });

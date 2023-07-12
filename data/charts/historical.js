@@ -18,15 +18,22 @@ function extractHistorical() {
             rowNum = 1;
         }
         for (rowNum; rowNum < rows.length; rowNum++) {
-            var columns = rows[rowNum].split(',');
+            let columns = rows[rowNum].split(',');
+            let time = Date.parse(columns[0]);
+
             for (let colNum = 1; colNum < 6; colNum++) {
-                var y = parseFloat(columns[colNum]);
-                var time = Date.parse(columns[0]);
-                chartTempDay.series[colNum-1].addPoint([time, y], true, false, true);
+                let temp_y = parseFloat(columns[colNum]);  
+                chartTempDay.series[colNum-1].addPoint([time, temp_y], true, false, true);
             }
-            var flow_y = parseFloat(columns[6]);
-            var flow_time = Date.parse(columns[0]);
-            chartFlowDay.series[0].addPoint([flow_time, flow_y], true, false, true);
+
+            let flow_y = parseFloat(columns[6]);
+            chartFlowDay.series[0].addPoint([time, flow_y], true, false, true);
+
+            let source_temp = columns[4];
+            let hot_temp = columns[5];
+            let preheat_temp = columns[2];
+            chartEnergyDay.series[0].addPoint([time, ((preheat_temp-source_temp)*flow_y*4.186)/3600], true, false, true);
+            chartEnergyDay.series[1].addPoint([time, ((hot_temp-preheat_temp)*flow_y*4.186)/3600], true, false, true);
         }
     }
 }

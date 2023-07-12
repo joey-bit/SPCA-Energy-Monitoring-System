@@ -1,4 +1,5 @@
-timestamp, glycol, preheat, ambient, source, hot, flow
+SPCA Hot Water Monitor - Units °C/L
+timestamp, glycol, preheat, ambient, source, hot, water usage
 2023-6-27 10:24, 70.3, 55.0, 22.3, 11.0, 65.3, 12
 2023-6-27 11:24, 63.3, 50.0, 23.9, 11.0, 62.3, 24
 2023-6-27 12:24, 80.3, 50.0, 21.3, 11.0, 64.3, 2

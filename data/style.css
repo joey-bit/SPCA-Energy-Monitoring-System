@@ -79,10 +79,11 @@ body {
     border-radius: 15px;
     background: #e6a433;
     background-image: linear-gradient(to bottom right, #f68f3a,rgb(218, 151, 44));
-    width: auto;
+    width: 30%;
     margin: auto;
     font-weight: bold;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
   }
 
   .subtabs .tab {

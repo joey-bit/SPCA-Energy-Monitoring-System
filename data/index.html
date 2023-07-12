@@ -15,7 +15,7 @@ copies or substantial portions of the Software. -->
 </head>
 
 <body>
-  <header><a href="https://spca.bc.ca/locations/sunshine-coast/"><img src = "logo.png" alt = "BCSPCA Logo" class="img-center" ></a></header>
+  <header><a href="https://spca.bc.ca/locations/sunshine-coast/" target="_blank"><img src = "logo.png" alt = "BCSPCA Logo" class="img-center" ></a></header>
   <h2>Hot Water Monitoring System</h2>
   <div class="mytabs">
     <input type="radio" id="tabtemps" name="rt-tab-control" checked="checked">
@@ -35,16 +35,6 @@ copies or substantial portions of the Software. -->
         <div class="tab">
           <div id="chart-temperature-day" class="container"></div>
         </div>
-        <input type="radio" id="tab-temp-monthly" name="hist-temp-tab-control">
-        <label for="tab-temp-monthly">Monthly</label>
-        <div class="tab">
-          <!-- <div id="chart-temperature-month" class="container"></div> <br> -->
-        </div>
-        <input type="radio" id="tab-temp-annual" name="hist-temp-tab-control">
-        <label for="tab-temp-annual">Annually</label>
-        <div class="tab">
-          <!-- <div id="chart-temperature-annual" class="container"></div> <br> -->
-        </div>
       </div>
     </section>
     <input type="radio" id="tabenergy" name="rt-tab-control">
@@ -57,22 +47,12 @@ copies or substantial portions of the Software. -->
         <input type="radio" id="tab-energy-hourly" name="hist-energy-tab-control" checked="checked">
         <label for="tab-energy-hourly">Hourly</label>
         <div class="tab">
-          <!-- <div id="chart-energy-hour" class="container"></div> <br> -->
+          <div id="chart-energy-hour" class="container"></div> <br>
         </div>
         <input type="radio" id="tab-energy-daily" name="hist-energy-tab-control">
         <label for="tab-energy-daily">Daily</label>
         <div class="tab">
-          <!-- <div id="chart-energy-day" class="container"></div> <br> -->
-        </div>
-        <input type="radio" id="tab-energy-monthly" name="hist-energy-tab-control">
-        <label for="tab-energy-monthly">Monthly</label>
-        <div class="tab">
-          <!-- <div id="chart-energy-month" class="container"></div> <br> -->
-        </div>
-        <input type="radio" id="tab-energy-annual" name="hist-energy-tab-control">
-        <label for="tab-energy-annual">Annually</label>
-        <div class="tab">
-          <!-- <div id="chart-energy-annual" class="container"></div> <br> -->
+          <div id="chart-energy-day" class="container"></div> <br>
         </div>
       </div>
     </section>
@@ -93,16 +73,6 @@ copies or substantial portions of the Software. -->
         <div class="tab">
           <div id="chart-flow-day" class="container"></div>
         </div>
-        <input type="radio" id="tab-flow-monthly" name="hist-flow-tab-control">
-        <label for="tab-flow-monthly">Monthly</label>
-        <div class="tab">
-          <!-- <div id="chart-flow-month" class="container"></div> <br> -->
-        </div>
-        <input type="radio" id="tab-flow-annual" name="hist-flow-tab-control">
-        <label for="tab-flow-annual">Annually</label>
-        <div class="tab">
-          <!-- <div id="chart-flow-annual" class="container"></div> <br> -->
-        </div>
       </div>
     </section>
   </div>
@@ -115,6 +85,6 @@ copies or substantial portions of the Software. -->
 <script src="charts/historical.js"></script>
 <script src="charts/temp.js"></script>
 <script src="charts/flow.js"></script>
-<!-- <script src="charts/energy.js"></script> -->
+<script src="charts/energy.js"></script>
 
 </html>
