@@ -1,0 +1,132 @@
+html {
+  background-color: rgb(12, 69, 168);
+  background-image: linear-gradient(to bottom right, rgb(41, 85, 188),rgb(180, 118, 32));
+  background-attachment: fixed;
+}
+
+body {
+    min-width: 310px;
+    max-width: 1000 auto;
+    height: 400px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #fff;
+  }
+
+  h3 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #000000;
+  }
+
+  .mytabs {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin:50px auto;
+  }
+
+  .mytabs input[type="radio"] {
+    display: none;
+  }
+
+  .mytabs label {
+    padding: 25px;
+    background: #e6a433;
+    width: auto;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  .mytabs .tab {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    order: 1;
+    display: none;
+  }
+
+  .mytabs .tab h2 {
+    font-size: 3em;
+  }
+
+  .mytabs input[type='radio']:checked+label+.tab {
+    display: block;
+  }
+
+  .mytabs input[type="radio"]:checked+label {
+    background: #fff;
+  }
+
+  .subtabs {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+  }
+
+  .subtabs input[type="radio"] {
+    display: none;
+  }
+
+  .subtabs label {
+    padding-bottom: 25px;
+    border-radius: 15px;
+    background: #e6a433;
+    background-image: linear-gradient(to bottom right, #f68f3a,rgb(218, 151, 44));
+    width: 30%;
+    margin: auto;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+  }
+
+  .subtabs .tab {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    order: 1;
+    display: none;
+  }
+
+  .subtabs .tab h2 {
+    font-size: 3em;
+  }
+
+  .subtabs input[type='radio']:checked+label+.tab {
+    display: block;
+  }
+
+  .subtabs input[type="radio"]:checked+label {
+    background:rgb(33, 71, 159);
+    background-image: linear-gradient(to bottom right, rgb(33, 71, 159),rgb(67, 108, 241));
+    color: #fff;
+  }
+  .img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    padding-top: 20px;
+  }
+
+  button{
+    background-color: rgb(33, 71, 159);
+    background-image: linear-gradient(to bottom right, rgb(33, 71, 159),rgb(67, 108, 241));
+    text-align: center;
+    border: none;
+    color: #ffffff;
+    padding: 15px 32px;
+    margin: 0;
+    margin-bottom: 30px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 12px;
+  }
