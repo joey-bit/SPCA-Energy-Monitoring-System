@@ -6,8 +6,8 @@
 #include <time.h>
 
 AsyncWebServer server(80);
-const char* SSID = "JoeyS20";
-const char* PASSWORD = "jboyer117";
+const char* SSID = "BC SPCA Sunshine Coast";
+const char* PASSWORD = "allcreatures";
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
@@ -16,8 +16,12 @@ tm timeData;
 
 DeviceAddress addr;
 
+#define LED_PIN 2
+
 void setup() {
   Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
@@ -29,6 +33,7 @@ void setup() {
     Serial.println("Connecting to WiFi..");
   }
   Serial.printf("Connected to the WiFi network with IP Address: %s\n", WiFi.localIP().toString().c_str());
+  digitalWrite(LED_PIN, HIGH);
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
   if(!getLocalTime(&timeData)){
     Serial.println("Failed to obtain time");
@@ -46,10 +51,10 @@ void setup() {
     request->send_P(200, "text/plain", tempProbe::getHourlyData().c_str());
   });
   server.on("/flow-rt", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(static_cast<float>(flowMeter::instance.realTime.at(tempProbe::indexRealTime))/100.0).c_str());
+    request->send_P(200, "text/plain", String(flowMeter::instance.realTime.at(tempProbe::indexRealTime)/100.0).c_str());
   });
   server.on("/flow-hr", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(static_cast<float>(flowMeter::instance.hourly.at(tempProbe::indexHourly))/100.0).c_str());
+    request->send_P(200, "text/plain", String(flowMeter::instance.hourly.at(tempProbe::indexHourly)/100.0).c_str());
   });
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
