@@ -6,8 +6,8 @@
 #include <time.h>
 
 AsyncWebServer server(80);
-const char* SSID = "BC SPCA Sunshine Coast";
-const char* PASSWORD = "allcreatures";
+const char* SSID = "JoeyS20";
+const char* PASSWORD = "jboyer117";
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
@@ -45,16 +45,16 @@ void setup() {
   });
   server.serveStatic("/", SPIFFS, "/");
   server.on("/temperature-rt", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", tempProbe::getRealTimeData().c_str());
+    request->send_P(200, "text/plain", tempProbe::getRealTimeTemp().c_str());
   });
   server.on("/temperature-hr", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", tempProbe::getHourlyData().c_str());
+    request->send_P(200, "text/plain", tempProbe::getHourlyTemp().c_str());
   });
   server.on("/flow-rt", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(flowMeter::instance.realTime.at(tempProbe::indexRealTime)/100.0).c_str());
+    request->send_P(200, "text/plain", flowMeter::instance.getRealTimeFlow().c_str());
   });
   server.on("/flow-hr", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(flowMeter::instance.hourly.at(tempProbe::indexHourly)/100.0).c_str());
+    request->send_P(200, "text/plain", flowMeter::instance.getHourlyFlow().c_str());
   });
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");

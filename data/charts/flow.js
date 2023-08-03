@@ -10,7 +10,7 @@ var chartFlowRT = new Highcharts.Chart({
     plotOptions: {
         line: {
             animation: false,
-            dataLabels: { enabled: true }
+            dataLabels: { enabled: false }
         },
     },
     xAxis: {
@@ -29,6 +29,7 @@ setInterval(function () {
         if (this.readyState == 4 && this.status == 200) {
             var x = (new Date()).getTime(),
                 y = parseFloat(this.responseText)/100;
+                flow_rt = y;
             if (chartFlowRT.series[0].data.length > 20) {
                 chartFlowRT.series[0].addPoint([x, y], true, true, true);
             } else {
@@ -71,6 +72,7 @@ setInterval(function () {
         if (this.readyState == 4 && this.status == 200) {
             var x = (new Date()).getTime(),
                 y = parseFloat(this.responseText)/100;
+                flow_hr = y;
             if (chartFlowRT.series[0].data.length > 30) {
                 chartFlowRT.series[0].addPoint([x, y], true, true, true);
             } else {

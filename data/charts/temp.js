@@ -112,7 +112,7 @@ var chartTempHR = new Highcharts.Chart({
     plotOptions: {
         line: {
             animation: false,
-            dataLabels: { enabled: true }
+            dataLabels: { enabled: false }
         },
     },
     xAxis: {

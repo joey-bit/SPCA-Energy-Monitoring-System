@@ -25,8 +25,8 @@ typedef struct tempProbe {
     static bool updateHourly, updateDaily;
 
     static void readAllProbes();
-    static String getRealTimeData();
-    static String getHourlyData();
+    static String getRealTimeTemp();
+    static String getHourlyTemp();
     static void updateCSV();
     static OneWire oneWire;
     static DallasTemperature sensors;
@@ -38,7 +38,9 @@ typedef struct flowMeter {
     uint16_t pulses;
     static flowMeter instance;
     void readFlowMeter();
-    std::array<short , 20> realTime;    //Stored in L/s
+    static String getRealTimeFlow();
+    static String getHourlyFlow();
+    std::array<short , 20> realTime;    //Stored in L/min
     std::array<short , 30> hourly;      //Integration of rate, stored in L
     std::array<short , 24> daily;       //Integration of rate, stored in L
 }flowMeter;
