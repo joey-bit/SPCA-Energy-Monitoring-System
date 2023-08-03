@@ -64,7 +64,7 @@ void tempProbe::readAllProbes()
     }
 }
 
-String tempProbe::getRealTimeData()
+String tempProbe::getRealTimeTemp()
 {
     String data = "";
     for(auto &probe : probes)
@@ -79,11 +79,11 @@ String tempProbe::getRealTimeData()
         
     }
     data.remove(data.length() - 1); //remove the final comma
-    printf("Sending to HTML: %s\n", data.c_str());
+    //printf("Sending to HTML: %s\n", data.c_str());
     return data;
 }
 
-String tempProbe::getHourlyData()
+String tempProbe::getHourlyTemp()
 {
     String data = "";
     for(auto &probe : probes)
@@ -130,8 +130,7 @@ void tempProbe::updateCSV()
     }
     if(!fileHandle.println(data)) Serial.println("Failed to append file");
     else Serial.println("File appended");
-    fileHandle.close();
-    
+    fileHandle.close(); 
 }
 
 flowMeter flowMeter::instance{};
@@ -141,6 +140,30 @@ flowMeter::flowMeter()
     realTime.fill(0);
     hourly.fill(0);
     daily.fill(0);
+}
+
+String flowMeter::getRealTimeFlow() {
+    String data = "";
+    try{
+        data += String(instance.realTime.at(tempProbe::indexRealTime-1));
+    }
+    catch(const std::out_of_range& oor)
+    {
+        data += String(instance.realTime.at(19));    //We are on index 0, so we want the last element of the array
+    }
+    return data;
+}
+
+String flowMeter::getHourlyFlow() {
+    String data = "";
+    try{
+        data += String(instance.hourly.at(tempProbe::indexHourly-1));
+    }
+    catch(const std::out_of_range& oor)
+    {
+        data += String(instance.hourly.at(19));    //We are on index 0, so we want the last element of the array
+    }
+    return data;
 }
 
 void IRAM_ATTR pulseCounter()
@@ -154,6 +177,6 @@ void flowMeter::readFlowMeter() {
     delay(1000);
     detachInterrupt(FLOW_METER_PIN);
     //Serial.printf("Pulses: %d\n", instance.pulses);
-    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);
+    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);  //Store the flow rate in the array in L/min using floating point represetation
     //Serial.printf("Flow meter reading: %.3f L/min\n", static_cast<float>(instance.realTime.at(tempProbe::indexRealTime))/100.0);
 }
