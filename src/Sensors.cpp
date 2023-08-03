@@ -79,7 +79,7 @@ String tempProbe::getRealTimeTemp()
         
     }
     data.remove(data.length() - 1); //remove the final comma
-    printf("Sending to HTML: %s\n", data.c_str());
+    //printf("Sending to HTML: %s\n", data.c_str());
     return data;
 }
 
@@ -130,8 +130,7 @@ void tempProbe::updateCSV()
     }
     if(!fileHandle.println(data)) Serial.println("Failed to append file");
     else Serial.println("File appended");
-    fileHandle.close();
-    
+    fileHandle.close(); 
 }
 
 flowMeter flowMeter::instance{};
@@ -178,6 +177,6 @@ void flowMeter::readFlowMeter() {
     delay(1000);
     detachInterrupt(FLOW_METER_PIN);
     //Serial.printf("Pulses: %d\n", instance.pulses);
-    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);
+    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);  //Store the flow rate in the array in L/min using floating point represetation
     //Serial.printf("Flow meter reading: %.3f L/min\n", static_cast<float>(instance.realTime.at(tempProbe::indexRealTime))/100.0);
 }
