@@ -6,17 +6,24 @@
 #include <time.h>
 
 AsyncWebServer server(80);
-const char* SSID = "JoeyS20";
-const char* PASSWORD = "jboyer117";
+const char* SSID = "BC SPCA Sunshine Coast";
+const char* PASSWORD = "allcreatures";
+const char* AP_SSID = "Hot Water Monitor";
+const char* AP_PASSWORD = "solarpower";
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
+
+IPAddress IP(192, 168, 1, 1);
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
 
 tm timeData;
 
 DeviceAddress addr;
 
 #define LED_PIN 2
+bool connectWIFI();
 
 void setup() {
   Serial.begin(115200);
@@ -26,20 +33,14 @@ void setup() {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(SSID, PASSWORD);
-  while(WiFi.status() != WL_CONNECTED){
-    delay(5000);
-    Serial.println("Connecting to WiFi..");
-  }
-  Serial.printf("Connected to the WiFi network with IP Address: %s\n", WiFi.localIP().toString().c_str());
-  digitalWrite(LED_PIN, HIGH);
-  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-  if(!getLocalTime(&timeData)){
-    Serial.println("Failed to obtain time");
-  } else {
-    Serial.printf("Current time: %s\n", asctime(&timeData));
-  } 
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP(AP_SSID, AP_PASSWORD);
+  delay(500);
+  WiFi.softAPConfig(IP, gateway, subnet);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
+  connectWIFI();
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/index.html");
   });
@@ -59,7 +60,12 @@ void setup() {
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
   });
-  
+  server.on("/wifi-reconnect", HTTP_GET, [](AsyncWebServerRequest *request){
+    if(WiFi.status() != WL_CONNECTED)
+      connectWIFI();
+    request->send_P(200, "text/plain", "connected");
+  });
+
   server.begin();
   pinMode(FLOW_METER_PIN, INPUT_PULLUP);
   tempProbe::sensors.begin();
@@ -70,4 +76,28 @@ void loop() {
   // put your main code here, to run repeatedly:
   tempProbe::readAllProbes();
   delay(4900);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
+}
+
+bool connectWIFI() {
+  Serial.print("Connecting to WiFi");
+  WiFi.begin(SSID, PASSWORD);
+  for(auto i = 0; i<5; i++){
+    delay(3000);
+    if(WiFi.status() == WL_CONNECTED){
+      Serial.println();
+      Serial.printf("Connected to the WiFi network with IP Address: %s\n", WiFi.localIP().toString().c_str());
+      digitalWrite(LED_PIN, HIGH);
+      configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+    if(!getLocalTime(&timeData)){
+      Serial.println("Failed to obtain time");
+    } else {
+      Serial.printf("Current time: %s\n", asctime(&timeData));
+    } 
+      return true;
+    }
+    Serial.print(".");
+  }
+  if(WiFi.status() != WL_CONNECTED)
+    Serial.println("Failed to connect to the WiFi network, operating in AP mode only");
+  return false;
 }
