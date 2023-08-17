@@ -36,14 +36,12 @@ var chartEnergyRT = new Highcharts.Chart({
 });
 setInterval(function () {
     let x = (new Date()).getTime();
-    for (let i = 0; i < 2; i++) {
-        if (chartEnergyRT.series[i].data.length > 20) {
-            chartEnergyRT.series[0].addPoint([x, ((preheat_temp_rt-source_temp_rt)*4.186*flow_rt/60)], true, true, true);
-            chartEnergyRT.series[1].addPoint([x, ((hot_temp_rt-preheat_temp_rt)*4.186*flow_rt/60)], true, true, true);
-        } else {
-            chartEnergyRT.series[0].addPoint([x, ((preheat_temp_rt-source_temp_rt)*4.186*flow_rt/60)], true, false, true);
-            chartEnergyRT.series[1].addPoint([x, ((hot_temp_rt-preheat_temp_rt)*4.186*flow_rt/60)], true, false, true);
-        }
+    if (chartEnergyRT.series[0].data.length > 20) {
+        chartEnergyRT.series[0].addPoint([x, ((preheat_temp_rt-source_temp_rt)*4.186*flow_rt/60)], true, true, true);
+        chartEnergyRT.series[1].addPoint([x, ((hot_temp_rt-preheat_temp_rt)*4.186*flow_rt/60)], true, true, true);
+    } else {
+        chartEnergyRT.series[0].addPoint([x, ((preheat_temp_rt-source_temp_rt)*4.186*flow_rt/60)], true, false, true);
+        chartEnergyRT.series[1].addPoint([x, ((hot_temp_rt-preheat_temp_rt)*4.186*flow_rt/60)], true, false, true);
     }
 }, 6500);
 
@@ -85,14 +83,12 @@ var chartEnergyHR = new Highcharts.Chart({
 });
 setInterval(function () {
     let x = (new Date()).getTime();
-    for (let i = 0; i < 2; i++) {
-        if (chartEnergyHR.series[i].data.length > 30) {
-            chartEnergyHR.series[0].addPoint([x, ((preheat_temp_hr-source_temp_hr)*4.186*flow_hr)/3600], true, true, true);
-            chartEnergyHR.series[1].addPoint([x, ((hot_temp_hr-preheat_temp_hr)*4.186*flow_hr)/3600], true, true, true);
-        } else {
-            chartEnergyHR.series[0].addPoint([x, ((preheat_temp_hr-source_temp_hr)*4.186*flow_hr)/3600], true, false, true);
-            chartEnergyHR.series[1].addPoint([x, ((hot_temp_hr-preheat_temp_hr)*4.186*flow_hr)/3600], true, false, true);
-        }
+    if (chartEnergyHR.series[i].data.length > 30) {
+        chartEnergyHR.series[0].addPoint([x, ((preheat_temp_hr-source_temp_hr)*4.186*flow_hr)/3600], true, true, true);
+        chartEnergyHR.series[1].addPoint([x, ((hot_temp_hr-preheat_temp_hr)*4.186*flow_hr)/3600], true, true, true);
+    } else {
+        chartEnergyHR.series[0].addPoint([x, ((preheat_temp_hr-source_temp_hr)*4.186*flow_hr)/3600], true, false, true);
+        chartEnergyHR.series[1].addPoint([x, ((hot_temp_hr-preheat_temp_hr)*4.186*flow_hr)/3600], true, false, true);
     }
 },120500);
 
