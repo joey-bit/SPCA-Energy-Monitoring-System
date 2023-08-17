@@ -36,11 +36,11 @@ void tempProbe::readAllProbes()
     {
         for(auto &probe : probes) 
         {
-            probe.hourly[indexHourly] = static_cast<short>(std::accumulate(probe.realTime.begin(), probe.realTime.end(), 0.0) / probe.realTime.size());
+            probe.hourly[indexHourly] = static_cast<short>(std::accumulate(probe.realTime.begin(), probe.realTime.end(), 0.0) / 20.0);
         }
         flowMeter::instance.hourly[indexHourly] = static_cast<short>(std::accumulate(flowMeter::instance.realTime.begin(), flowMeter::instance.realTime.end(), 0.0)/10.0);
         indexHourly++;
-        if(indexHourly == 60)
+        if(indexHourly == 30)
         {
             indexHourly = 0;
             updateDaily = true;
@@ -51,7 +51,7 @@ void tempProbe::readAllProbes()
     {
         for(auto &probe : probes)
         {
-            probe.daily.at(indexDaily) = static_cast<short>(std::accumulate(probe.hourly.begin(), probe.hourly.end(), 0.0) / probe.hourly.size());
+            probe.daily.at(indexDaily) = static_cast<short>(std::accumulate(probe.hourly.begin(), probe.hourly.end(), 0.0) / 30.0);
         }
         flowMeter::instance.daily[indexDaily] = static_cast<short>(std::accumulate(flowMeter::instance.hourly.begin(), flowMeter::instance.hourly.end(), 0.0));
         updateCSV();

@@ -1,6 +1,6 @@
 Highcharts.setOptions({
     time: {
-        timezone: 'Vancouver'
+        timezone: 'America/Vancouver'
     }
 });
 

@@ -6,8 +6,8 @@
 #include <time.h>
 
 AsyncWebServer server(80);
-const char* SSID = "BC SPCA Sunshine Coast";
-const char* PASSWORD = "allcreatures";
+const char* SSID = "SCCSA";
+const char* PASSWORD = "sccsa2023";
 const char* AP_SSID = "Hot Water Monitor";
 const char* AP_PASSWORD = "solarpower";
 const char* ntpServer = "pool.ntp.org";
@@ -15,6 +15,7 @@ const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
 
 IPAddress IP(192, 168, 1, 1);
+IPAddress local_IP(192, 168, 1, 117); // Desired Static IP Address
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
@@ -80,6 +81,10 @@ void loop() {
 
 bool connectWIFI() {
   Serial.print("Connecting to WiFi");
+  if (!WiFi.config(local_IP, gateway, subnet))
+  {
+    Serial.println("Configuration Failed!");
+  }
   WiFi.begin(SSID, PASSWORD);
   for(auto i = 0; i<5; i++){
     delay(3000);
