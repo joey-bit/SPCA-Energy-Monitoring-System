@@ -57,9 +57,9 @@ setInterval(function () {
         if (this.readyState == 4 && this.status == 200) { //When ready to receive
             var x = (new Date()).getTime(), //Current time
                 y = this.responseText.split(',').map(Number); //Get the data as an array of floats
-                preheat_temp_rt = y[2]/100;
-                source_temp_rt = y[4]/100;
-                hot_temp_rt = y[5]/100;
+                preheat_temp_rt = parseFloat(y[2])/100;
+                source_temp_rt = parseFloat(y[4])/100;
+                hot_temp_rt = parseFloat(y[5])/100;
             for (let i = 0; i < 5; i++) {
                 if (chartTempRT.series[i].data.length > 20) { //If there are more than 20 points
                     chartTempRT.series[i].addPoint([x, y[i]/100], true, true, true); //Add a point and shift
@@ -76,7 +76,7 @@ setInterval(function () {
 //Code that creates a chart of historical temperature data (2 minute data)
 var chartTempHR = new Highcharts.Chart({
     chart: { renderTo: 'chart-temperature-hour' },
-    title: { text: 'Hourly System Temperatures' },
+    title: { text: 'Hourly Maximum Temperatures' },
     series: [
         {
             type: "line",
@@ -132,9 +132,9 @@ setInterval(function () {
         if (this.readyState == 4 && this.status == 200) { //When ready to receive
             var x = (new Date()).getTime(), //Current time
                 y = this.responseText.split(',').map(Number); //Get the data as an array of floats
-                preheat_temp_hr = y[2]/100;
-                source_temp_hr = y[4]/100;
-                hot_temp_hr = y[5]/100;
+                preheat_temp_hr = parseFloat(y[2])/100;
+                source_temp_hr = parseFloat(y[4])/100;
+                hot_temp_hr = parseFloat(y[5])/100;
             for (let i = 0; i < 5; i++) {
                 if (chartTempHR.series[i].data.length > 30) { //If there are more than 30 points
                     chartTempHR.series[i].addPoint([x, y[i]/100], true, true, true); //Add a point and shift
@@ -150,7 +150,7 @@ setInterval(function () {
 
 var chartTempDay = new Highcharts.Chart({
     chart: { renderTo: 'chart-temperature-day' },
-    title: { text: 'Daily System Temperatures' },
+    title: { text: 'Daily Maximum Temperatures' },
     series: [
         {
             type: "line",

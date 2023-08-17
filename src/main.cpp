@@ -76,7 +76,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   tempProbe::readAllProbes();
-  delay(4900);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
+  delay(5000);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
 }
 
 bool connectWIFI() {

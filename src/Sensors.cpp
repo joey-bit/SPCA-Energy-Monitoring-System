@@ -36,7 +36,7 @@ void tempProbe::readAllProbes()
     {
         for(auto &probe : probes) 
         {
-            probe.hourly[indexHourly] = static_cast<short>(std::accumulate(probe.realTime.begin(), probe.realTime.end(), 0.0) / 20.0);
+            probe.hourly[indexHourly] = *std::max_element(probe.realTime.begin(), probe.realTime.end());
         }
         flowMeter::instance.hourly[indexHourly] = static_cast<short>(std::accumulate(flowMeter::instance.realTime.begin(), flowMeter::instance.realTime.end(), 0.0)/10.0);
         indexHourly++;
@@ -51,7 +51,7 @@ void tempProbe::readAllProbes()
     {
         for(auto &probe : probes)
         {
-            probe.daily.at(indexDaily) = static_cast<short>(std::accumulate(probe.hourly.begin(), probe.hourly.end(), 0.0) / 30.0);
+            probe.daily.at(indexDaily) = *std::max_element(probe.hourly.begin(), probe.hourly.end());
         }
         flowMeter::instance.daily[indexDaily] = static_cast<short>(std::accumulate(flowMeter::instance.hourly.begin(), flowMeter::instance.hourly.end(), 0.0));
         updateCSV();
@@ -177,6 +177,6 @@ void flowMeter::readFlowMeter() {
     delay(1000);
     detachInterrupt(FLOW_METER_PIN);
     //Serial.printf("Pulses: %d\n", instance.pulses);
-    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/ 5.5*100);  //Store the flow rate in the array in L/min using floating point represetation
+    instance.realTime.at(tempProbe::indexRealTime) = static_cast<short>(instance.pulses/5.5*100);  //Store the flow rate in the array in L/min using two-decimal-point represetation
     //Serial.printf("Flow meter reading: %.3f L/min\n", static_cast<float>(instance.realTime.at(tempProbe::indexRealTime))/100.0);
 }
