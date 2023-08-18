@@ -1,9 +1,14 @@
 html {
   background-color: rgb(12, 69, 168);
-  background-image: linear-gradient(to bottom right, rgb(41, 85, 188),rgb(180, 118, 32));
+  background-image: linear-gradient(to bottom right, rgb(14, 83, 21),rgb(47, 180, 32));
   background-attachment: fixed;
 }
 
+img {
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  border-radius: 15px;
+}
 body {
     min-width: 310px;
     max-width: 1000 auto;
@@ -104,7 +109,7 @@ body {
 
   .subtabs input[type="radio"]:checked+label {
     background:rgb(33, 71, 159);
-    background-image: linear-gradient(to bottom right, rgb(33, 71, 159),rgb(67, 108, 241));
+    background-image: linear-gradient(to bottom right, rgb(14, 83, 21),rgb(47, 180, 32));
     color: #fff;
   }
   .img-center {
@@ -117,7 +122,7 @@ body {
 
   button{
     background-color: rgb(33, 71, 159);
-    background-image: linear-gradient(to bottom right, rgb(33, 71, 159),rgb(67, 108, 241));
+    background-image: linear-gradient(to bottom right, #f68f3a,rgb(218, 151, 44));
     text-align: center;
     border: none;
     color: #ffffff;

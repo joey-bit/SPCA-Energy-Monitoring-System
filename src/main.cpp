@@ -5,17 +5,16 @@
 #include <Sensors.h>
 #include <time.h>
 
+//Server object and wifi/time information
 AsyncWebServer server(80);
-const char* SSID = "SCCSA";
-const char* PASSWORD = "sccsa2023";
-const char* AP_SSID = "Hot Water Monitor";
-const char* AP_PASSWORD = "solarpower";
+const char* SSID = "Peachy 2.4";
+const char* PASSWORD = "Friendly";
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
 
-IPAddress IP(192, 168, 1, 1);
-IPAddress local_IP(192, 168, 1, 117); // Desired Static IP Address
+// Desired Static IP configuration, access the web server at this address
+IPAddress local_IP(192, 168, 1, 117); 
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
@@ -27,21 +26,24 @@ DeviceAddress addr;
 bool connectWIFI();
 
 void setup() {
+  //Initialize serial communication for laptop terminal
   Serial.begin(115200);
+
+  //Turn LED off to begin
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+
+  //Mount the SPIFFS file system
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP(AP_SSID, AP_PASSWORD);
-  delay(500);
-  WiFi.softAPConfig(IP, gateway, subnet);
-  IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(IP);
+
+  //Configure the WiFi
+  WiFi.mode(WIFI_STA);
   connectWIFI();
+
+  //Callback functions of the web server
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/index.html");
   });
@@ -67,14 +69,16 @@ void setup() {
     request->send_P(200, "text/plain", "connected");
   });
 
+  //Start the web server
   server.begin();
+
+  //Initialize the temperature probes and flow meter
   pinMode(FLOW_METER_PIN, INPUT_PULLUP);
   tempProbe::sensors.begin();
   printf("Found %d sensors\n", tempProbe::sensors.getDeviceCount());
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   tempProbe::readAllProbes();
   delay(5000);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
 }
@@ -103,6 +107,6 @@ bool connectWIFI() {
     Serial.print(".");
   }
   if(WiFi.status() != WL_CONNECTED)
-    Serial.println("Failed to connect to the WiFi network, operating in AP mode only");
+    Serial.println("Failed to connect to the WiFi network");
   return false;
 }

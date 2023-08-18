@@ -1,9 +1,9 @@
 Highcharts.setOptions({
     time: {
-        timezone: 'America/Vancouver'
+        useUTC: false,
+        timezone: 'America/Vancouver',
     }
 });
-
 document.addEventListener('DOMContentLoaded', extractHistorical);
 function extractHistorical() {
     var xhttp = new XMLHttpRequest(); //Create a data request
