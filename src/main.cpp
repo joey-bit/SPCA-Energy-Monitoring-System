@@ -9,7 +9,7 @@
 
 //Server object and wifi/time information
 AsyncWebServer server(80);
-const char* SSID = "Peachy 2.4";
+const char* SSID = "Peachy2.4";
 const char* PASSWORD = "Friendly";
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
