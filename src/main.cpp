@@ -5,6 +5,8 @@
 #include <Sensors.h>
 #include <time.h>
 
+#define LED_PIN 2
+
 //Server object and wifi/time information
 AsyncWebServer server(80);
 const char* SSID = "Peachy 2.4";
@@ -13,18 +15,18 @@ const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
 
-// Desired Static IP configuration, access the web server at this address
+// Desired Static IP configuration, access the web server at this address (you can set this to whatever 192.168.1.XXX you want)
 IPAddress local_IP(192, 168, 1, 117); 
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
+//Stores timedata and updates automatically when time is first fetched
 tm timeData;
 
-DeviceAddress addr;
-
-#define LED_PIN 2
+//Function declaration
 bool connectWIFI();
 
+//Runs once at startup
 void setup() {
   //Initialize serial communication for laptop terminal
   Serial.begin(115200);
