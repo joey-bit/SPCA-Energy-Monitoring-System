@@ -9,6 +9,8 @@
 
 //Server object and wifi/time information
 AsyncWebServer server(80);
+const char* AP_SSID = "Hot Water Monitor";
+const char* AP_PASSWORD = "solarpower";
 const char* SSID = "Peachy2.4";
 const char* PASSWORD = "Friendly";
 const char* ntpServer = "pool.ntp.org";
@@ -42,7 +44,13 @@ void setup() {
   }
 
   //Configure the WiFi
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP(AP_SSID, AP_PASSWORD);
+  delay(500);
+  WiFi.softAPConfig(gateway, gateway, subnet);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
   connectWIFI();
 
   //Callback functions of the web server
@@ -109,6 +117,6 @@ bool connectWIFI() {
     Serial.print(".");
   }
   if(WiFi.status() != WL_CONNECTED)
-    Serial.println("Failed to connect to the WiFi network");
+    Serial.println("Failed to connect to the WiFi network, operating in AP mode");
   return false;
 }
