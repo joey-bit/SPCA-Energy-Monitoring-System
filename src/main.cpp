@@ -11,19 +11,23 @@
 AsyncWebServer server(80);
 const char* AP_SSID = "Hot Water Monitor";
 const char* AP_PASSWORD = "solarpower";
-const char* SSID = "Peachy2.4";
+const char* SSID = "Peachy5.0";
 const char* PASSWORD = "Friendly";
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
 
 // Desired Static IP configuration, access the web server at this address (you can set this to whatever 192.168.1.XXX you want)
-IPAddress local_IP(192, 168, 1, 117); 
-IPAddress gateway(192, 168, 1, 1);
+IPAddress local_IP(192, 168, 0, 117); 
+IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
+IPAddress dns(8,8,8,8);
+
+IPAddress ap_IP(192, 168, 1, 1);
+IPAddress ap_gateway(192, 168, 1, 1);
 
 //Stores timedata and updates automatically when time is first fetched
-tm timeData;
+struct tm timeData;
 
 //Function declaration
 bool connectWIFI();
@@ -47,7 +51,7 @@ void setup() {
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAP(AP_SSID, AP_PASSWORD);
   delay(500);
-  WiFi.softAPConfig(gateway, gateway, subnet);
+  WiFi.softAPConfig(ap_IP, ap_gateway, subnet);
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(IP);
@@ -95,18 +99,18 @@ void loop() {
 
 bool connectWIFI() {
   Serial.print("Connecting to WiFi");
-  if (!WiFi.config(local_IP, gateway, subnet))
+  if (!WiFi.config(local_IP, gateway, subnet, dns))
   {
     Serial.println("Configuration Failed!");
   }
   WiFi.begin(SSID, PASSWORD);
   for(auto i = 0; i<5; i++){
-    delay(3000);
     if(WiFi.status() == WL_CONNECTED){
       Serial.println();
       Serial.printf("Connected to the WiFi network with IP Address: %s\n", WiFi.localIP().toString().c_str());
       digitalWrite(LED_PIN, HIGH);
       configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+      delay(500);
     if(!getLocalTime(&timeData)){
       Serial.println("Failed to obtain time");
     } else {
@@ -114,6 +118,7 @@ bool connectWIFI() {
     } 
       return true;
     }
+    delay(3000);
     Serial.print(".");
   }
   if(WiFi.status() != WL_CONNECTED)
