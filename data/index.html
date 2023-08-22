@@ -80,16 +80,30 @@ copies or substantial portions of the Software. -->
     <a href="historical_data.csv" download>
       <button> Download Historical Data </button>
   </a>
-  </div>
-  <div class="wifi-buttton" style="text-align: center;">
-    <a href="wifi-reconnect">
-    <button><img src = "wifi.png" alt = "Wifi Symbol" class="img-center" ><label>Reconnect</label></button>
-    </a>
+  <form action="wifi-creds" method="get">
+    <h4>Update WiFi Credentials</h4>
+    <h5 id="wifi-status">Status: Disconnected</h5>
+    <input type="text" name="ssid" placeholder="SSID" required>
+    <input type="text" name="pass" placeholder="Password" required>
+    <button type="submit">Connect</button>  
+  </form> 
   </div>
 </body>
 <script src="charts/historical.js"></script>
 <script src="charts/temp.js"></script>
 <script src="charts/flow.js"></script>
 <script src="charts/energy.js"></script>
+<script>
+  var xhttp = new XMLHttpRequest(); //Create a data request
+    xhttp.onreadystatechange = updateWifiStatus; //When the data request is ready, run the updateWifiStatus function
+    xhttp.open("GET", "/wifi-stat"); //Open the data request
+    xhttp.send();   //Send the data request
+
+    function updateWifiStatus() {
+      if (this.readyState == 4 && this.status == 200) { //If the data request is ready and successful
+        document.getElementById("wifi-status").innerHTML = "Status: " + this.responseText;
+      }
+    }
+</script>
 
 </html>

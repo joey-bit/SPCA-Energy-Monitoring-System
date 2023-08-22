@@ -30,6 +30,20 @@ body {
     color: #000000;
   }
 
+  h4 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #fff;
+  }
+
+  h5 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
+  }
+
   .mytabs {
     display: flex;
     flex-wrap: wrap;
@@ -120,6 +134,17 @@ body {
     padding-top: 20px;
   }
 
+  .reconnect {
+    background-image: linear-gradient(to bottom right, #f68f3a,rgb(218, 151, 44));
+    text-align: left;
+    border: none;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  
   button{
     background-color: rgb(33, 71, 159);
     background-image: linear-gradient(to bottom right, #f68f3a,rgb(218, 151, 44));

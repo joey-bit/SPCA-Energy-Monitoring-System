@@ -11,26 +11,29 @@
 AsyncWebServer server(80);
 const char* AP_SSID = "Hot Water Monitor";
 const char* AP_PASSWORD = "solarpower";
-const char* SSID = "Peachy5.0";
-const char* PASSWORD = "Friendly";
+const char* STORED_SSID = "Peachy5.0";
+const char* STORED_PASSWORD = "Friendly";
+
+//Time information
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -28800;
 const int daylightOffset_sec = 3600;
 
-// Desired Static IP configuration, access the web server at this address (you can set this to whatever 192.168.1.XXX you want)
-IPAddress local_IP(192, 168, 0, 117); 
-IPAddress gateway(192, 168, 0, 1);
-IPAddress subnet(255, 255, 255, 0);
-IPAddress dns(8,8,8,8);
+//Variables used to update wifi credentials
+String inputSSID;
+String inputPass;
+bool updateWIFI = false;
 
+//Static IP configuration for access point mode
 IPAddress ap_IP(192, 168, 1, 1);
+IPAddress ap_subnet(255, 255, 255, 0);
 IPAddress ap_gateway(192, 168, 1, 1);
 
 //Stores timedata and updates automatically when time is first fetched
 struct tm timeData;
 
 //Function declaration
-bool connectWIFI();
+bool connectWIFI(const char* ssid, const char* pass);
 
 //Runs once at startup
 void setup() {
@@ -51,11 +54,11 @@ void setup() {
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAP(AP_SSID, AP_PASSWORD);
   delay(500);
-  WiFi.softAPConfig(ap_IP, ap_gateway, subnet);
+  WiFi.softAPConfig(ap_IP, ap_gateway, ap_subnet);
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(IP);
-  connectWIFI();
+  connectWIFI(STORED_SSID, STORED_PASSWORD);
 
   //Callback functions of the web server
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -77,10 +80,28 @@ void setup() {
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
   });
-  server.on("/wifi-reconnect", HTTP_GET, [](AsyncWebServerRequest *request){
-    if(WiFi.status() != WL_CONNECTED)
-      connectWIFI();
-    request->send_P(200, "text/plain", "connected");
+  server.on("/wifi-creds", HTTP_GET, [](AsyncWebServerRequest *request){
+    if (request->hasParam("ssid")) {
+      inputSSID = request->getParam("ssid")->value();
+      inputPass = request->getParam("pass")->value();
+      updateWIFI = true;
+    }
+    request->send_P(200, "text/plain", "Connecting, please wait 15 seconds and then enter 192.168.1.1 in the address bar");
+  });
+  server.on("/wifi-stat", HTTP_GET, [](AsyncWebServerRequest *request){
+    String details;
+    if(WiFi.status() == WL_CONNECTED)
+    {
+      details += "Connected to ";
+      details += WiFi.SSID();
+      details += " with IP Address: ";
+      details += WiFi.localIP().toString();
+    }
+    else
+    {
+      details += "Not connected to a network";
+    }
+    request->send_P(200, "text/plain", details.c_str());
   });
 
   //Start the web server
@@ -95,15 +116,16 @@ void setup() {
 void loop() {
   tempProbe::readAllProbes();
   delay(5000);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
+  if(updateWIFI)
+  {
+    updateWIFI = false;
+    connectWIFI(inputSSID.c_str(), inputPass.c_str());
+  }
 }
 
-bool connectWIFI() {
+bool connectWIFI(const char* ssid, const char* pass) {
   Serial.print("Connecting to WiFi");
-  if (!WiFi.config(local_IP, gateway, subnet, dns))
-  {
-    Serial.println("Configuration Failed!");
-  }
-  WiFi.begin(SSID, PASSWORD);
+  WiFi.begin(ssid, pass);
   for(auto i = 0; i<5; i++){
     if(WiFi.status() == WL_CONNECTED){
       Serial.println();
