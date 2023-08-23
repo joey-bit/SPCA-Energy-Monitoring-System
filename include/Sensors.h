@@ -25,6 +25,9 @@ typedef struct tempProbe {
     static bool updateHourly, updateDaily;
 
     static void readAllProbes();
+    static void incrementRealTime();
+    static void updateHourlyData();
+    static void updateDailyData();
     static String getRealTimeTemp();
     static String getHourlyTemp();
     static String getRealTimePower();
