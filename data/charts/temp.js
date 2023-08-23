@@ -52,14 +52,11 @@ var chartTempRT = new Highcharts.Chart({
 });
 //Function that allows the chart to update every 6 seconds
 setInterval(function () {
-    var xhttp = new XMLHttpRequest(); //Create a data request
+    let xhttp = new XMLHttpRequest(); //Create a data request
     xhttp.onreadystatechange = function () { //Callback function
         if (this.readyState == 4 && this.status == 200) { //When ready to receive
-            var x = (new Date()).getTime(), //Current time
+            let x = (new Date()).getTime(), //Current time
                 y = this.responseText.split(',').map(Number); //Get the data as an array of floats
-                preheat_temp_rt = parseFloat(y[2])/100;
-                source_temp_rt = parseFloat(y[4])/100;
-                hot_temp_rt = parseFloat(y[5])/100;
             for (let i = 0; i < 5; i++) {
                 if (chartTempRT.series[i].data.length > 20) { //If there are more than 20 points
                     chartTempRT.series[i].addPoint([x, y[i]/100], true, true, true); //Add a point and shift
@@ -127,14 +124,11 @@ var chartTempHR = new Highcharts.Chart({
 });
 //Function that allows the chart to update every 2 minutes
 setInterval(function () {
-    var xhttp = new XMLHttpRequest(); //Create a data request
+    let xhttp = new XMLHttpRequest(); //Create a data request
     xhttp.onreadystatechange = function () { //Callback function
         if (this.readyState == 4 && this.status == 200) { //When ready to receive
-            var x = (new Date()).getTime(), //Current time
+            let x = (new Date()).getTime(), //Current time
                 y = this.responseText.split(',').map(Number); //Get the data as an array of floats
-                preheat_temp_hr = parseFloat(y[2])/100;
-                source_temp_hr = parseFloat(y[4])/100;
-                hot_temp_hr = parseFloat(y[5])/100;
             for (let i = 0; i < 5; i++) {
                 if (chartTempHR.series[i].data.length > 30) { //If there are more than 30 points
                     chartTempHR.series[i].addPoint([x, y[i]/100], true, true, true); //Add a point and shift

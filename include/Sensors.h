@@ -27,6 +27,8 @@ typedef struct tempProbe {
     static void readAllProbes();
     static String getRealTimeTemp();
     static String getHourlyTemp();
+    static String getRealTimePower();
+    static String getHourlyEnergy();
     static void updateCSV();
     static OneWire oneWire;
     static DallasTemperature sensors;

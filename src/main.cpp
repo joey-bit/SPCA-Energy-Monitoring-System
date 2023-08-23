@@ -18,6 +18,7 @@ IPAddress IP(192, 168, 1, 1);
 IPAddress local_IP(192, 168, 1, 117); // Desired Static IP Address
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
+IPAddress dns(8, 8, 8, 8);
 
 tm timeData;
 
@@ -81,18 +82,18 @@ void loop() {
 
 bool connectWIFI() {
   Serial.print("Connecting to WiFi");
-  if (!WiFi.config(local_IP, gateway, subnet))
+  if (!WiFi.config(local_IP, gateway, subnet, dns))
   {
     Serial.println("Configuration Failed!");
   }
   WiFi.begin(SSID, PASSWORD);
   for(auto i = 0; i<5; i++){
-    delay(3000);
     if(WiFi.status() == WL_CONNECTED){
       Serial.println();
       Serial.printf("Connected to the WiFi network with IP Address: %s\n", WiFi.localIP().toString().c_str());
       digitalWrite(LED_PIN, HIGH);
       configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+      delay(500);
     if(!getLocalTime(&timeData)){
       Serial.println("Failed to obtain time");
     } else {
@@ -100,6 +101,7 @@ bool connectWIFI() {
     } 
       return true;
     }
+    delay(3000);
     Serial.print(".");
   }
   if(WiFi.status() != WL_CONNECTED)
