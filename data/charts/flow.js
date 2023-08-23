@@ -10,7 +10,7 @@ var chartFlowRT = new Highcharts.Chart({
     plotOptions: {
         line: {
             animation: false,
-            dataLabels: { enabled: false }
+            dataLabels: { enabled: true }
         },
     },
     xAxis: {
@@ -24,12 +24,11 @@ var chartFlowRT = new Highcharts.Chart({
     credits: { enabled: false }
 });
 setInterval(function () {
-    var xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var x = (new Date()).getTime(),
+            let x = (new Date()).getTime(),
                 y = parseFloat(this.responseText)/100;
-                flow_rt = y;
             if (chartFlowRT.series[0].data.length > 20) {
                 chartFlowRT.series[0].addPoint([x, y], true, true, true);
             } else {
@@ -67,12 +66,11 @@ var chartFlowHR = new Highcharts.Chart({
     credits: { enabled: false }
 });
 setInterval(function () {
-    var xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var x = (new Date()).getTime(),
+            let x = (new Date()).getTime(),
                 y = parseFloat(this.responseText)/100;
-                flow_hr = y;
             if (chartFlowHR.series[0].data.length > 30) {
                 chartFlowHR.series[0].addPoint([x, y], true, true, true);
             } else {

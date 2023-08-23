@@ -39,6 +39,8 @@ typedef struct tempProbe {
     //Functions that extract strings from the data to update the website, and write to the historical data file
     static String getRealTimeTemp();
     static String getHourlyTemp();
+    static String getRealTimePower();
+    static String getHourlyEnergy();
     static void updateCSV();
 
     //Objects required to interface with temp sensors

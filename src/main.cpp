@@ -77,6 +77,12 @@ void setup() {
   server.on("/flow-hr", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/plain", flowMeter::instance.getHourlyFlow().c_str());
   });
+  server.on("/energy-rt", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", tempProbe::getRealTimePower().c_str());
+  });
+  server.on("/energy-hr", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", tempProbe::getHourlyEnergy().c_str());
+  });
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
   });
