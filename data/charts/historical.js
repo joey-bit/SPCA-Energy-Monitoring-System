@@ -2,7 +2,7 @@ Highcharts.setOptions({
     time: {
         useUTC: false,
         timezone: 'America/Vancouver'
-    }
+    },
 });
 
 document.addEventListener('DOMContentLoaded', extractHistorical);
@@ -20,9 +20,9 @@ function extractHistorical() {
     function extractData(data) {
         var rows = data.split("\n");
         let rowNum = rows.length-24;
-        if(rowNum < 1) //Can't have rowNum be 0 because the historical data's first line is a header
+        if(rowNum < 2) //Can't have rowNum be 0 or 1 because the historical data's first and second lines are headers
         {
-            rowNum = 1;
+            rowNum = 2;
         }
         for (rowNum; rowNum < rows.length; rowNum++) {
             let columns = rows[rowNum].split(',');
@@ -39,8 +39,8 @@ function extractHistorical() {
             let source_temp = columns[4];
             let hot_temp = columns[5];
             let preheat_temp = columns[2];
-            chartEnergyDay.series[0].addPoint([time, ((preheat_temp-source_temp)*water_used*4.186)/3600], true, false, true);
-            chartEnergyDay.series[1].addPoint([time, ((hot_temp-preheat_temp)*water_used*4.186)/3600], true, false, true);
+            chartEnergyDay.series[0].addPoint([time, ((preheat_temp-source_temp)*water_used*4186)/3600], true, false, true);
+            chartEnergyDay.series[1].addPoint([time, ((hot_temp-preheat_temp)*water_used*4186)/3600], true, false, true);
         }
     }
 }

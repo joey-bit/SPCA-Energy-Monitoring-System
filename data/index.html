@@ -15,29 +15,10 @@ copies or substantial portions of the Software. -->
 </head>
 
 <body>
-  <header><a href="https://spca.bc.ca/locations/sunshine-coast/" target="_blank"><img src = "logo.png" alt = "BCSPCA Logo" class="img-center" ></a></header>
-  <h2>Hot Water Monitoring System</h2>
+  <h2>Sechelt SPCA Hot Water Monitoring System</h2>
   <div class="mytabs">
-    <input type="radio" id="tabtemps" name="rt-tab-control" checked="checked">
-    <label for="tabtemps"><i class="fa fa-thermometer" style="font-size: x-large"></i></label>
-    <section class="tab">
-      <h3>Realtime Data</h3>
-      <div id="chart-temperature-rt" class="container"></div> <br>
-      <h3>Historical Data</h3>
-      <div class="subtabs">
-        <input type="radio" id="tab-temp-hourly" name="hist-temp-tab-control" checked="checked">
-        <label for="tab-temp-hourly">Hourly</label>
-        <div class="tab">
-          <div id="chart-temperature-hour" class="container"></div>
-        </div>
-        <input type="radio" id="tab-temp-daily" name="hist-temp-tab-control">
-        <label for="tab-temp-daily">Daily</label>
-        <div class="tab">
-          <div id="chart-temperature-day" class="container"></div>
-        </div>
-      </div>
-    </section>
-    <input type="radio" id="tabenergy" name="rt-tab-control">
+
+    <input type="radio" id="tabenergy" name="rt-tab-control" checked="checked">
     <label for="tabenergy"><i class="fa-solid fa-bolt-lightning" style="font-size: x-large"></i></label>
     <section class="tab">
       <h3>Realtime Data</h3>
@@ -56,6 +37,27 @@ copies or substantial portions of the Software. -->
         </div>
       </div>
     </section>
+
+    <input type="radio" id="tabtemps" name="rt-tab-control">
+    <label for="tabtemps"><i class="fa fa-thermometer" style="font-size: x-large"></i></label>
+    <section class="tab">
+      <h3>Realtime Data</h3>
+      <div id="chart-temperature-rt" class="container"></div> <br>
+      <h3>Historical Data</h3>
+      <div class="subtabs">
+        <input type="radio" id="tab-temp-hourly" name="hist-temp-tab-control" checked="checked">
+        <label for="tab-temp-hourly">Hourly</label>
+        <div class="tab">
+          <div id="chart-temperature-hour" class="container"></div>
+        </div>
+        <input type="radio" id="tab-temp-daily" name="hist-temp-tab-control">
+        <label for="tab-temp-daily">Daily</label>
+        <div class="tab">
+          <div id="chart-temperature-day" class="container"></div>
+        </div>
+      </div>
+    </section>
+
     <input type="radio" id="tabflow" name="rt-tab-control">
     <label for="tabflow"><i class="fa-solid fa-faucet-drip" style="font-size: x-large"></i></label>
     <section class="tab">
@@ -76,6 +78,8 @@ copies or substantial portions of the Software. -->
       </div>
     </section>
   </div>
+
+
   <div class="download-button" style="text-align: center;">
     <a href="historical_data.csv" download>
       <button> Download Historical Data </button>

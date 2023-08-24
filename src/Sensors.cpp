@@ -25,7 +25,17 @@ void tempProbe::readAllProbes()
     for (auto &probe : probes)
     {
         auto temp = probe.sensors.getTempC(probe.uniqueAddress);
-        probe.realTime[indexRealTime] = static_cast<short>(temp * 100);
+        if(temp < 1)
+        {
+            if(indexRealTime == 0)
+                probe.realTime[indexRealTime] = probe.realTime[19];
+            else
+                probe.realTime[indexRealTime] = probe.realTime[indexRealTime-1];
+        }
+        else
+        {
+            probe.realTime[indexRealTime] = static_cast<short>(temp * 100);
+        }
     }
     flowMeter::instance.readFlowMeter();
     incrementRealTime();
@@ -115,16 +125,17 @@ String tempProbe::getRealTimePower()
     String data = "";
     try
     {
-        auto solarEnergy = static_cast<short>(static_cast<float>(probes.at(1).realTime.at(indexRealTime - 1)-probes.at(3).realTime.at(indexRealTime-1)) * 4.186 * static_cast<float>(flowMeter::instance.realTime.at(indexRealTime - 1)) / 100.0 / 60.0);
-        auto tankEnergy = static_cast<short>(static_cast<float>(probes.at(4).realTime.at(indexRealTime - 1)-probes.at(1).realTime.at(indexRealTime-1)) * 4.186 * static_cast<float>(flowMeter::instance.realTime.at(indexRealTime - 1)) / 100.0 / 60.0);
-        data += String(solarEnergy) + "," + String(tankEnergy);
+        auto tempDifferential = static_cast<float>(probes.at(4).realTime.at(indexRealTime - 1)-probes.at(3).realTime.at(indexRealTime-1));
+        auto solarPercent = static_cast<float>(probes.at(1).realTime.at(indexRealTime - 1)-probes.at(3).realTime.at(indexRealTime-1)) / tempDifferential * 100.0;
+        data += String(solarPercent,1);
     }
     catch (const std::out_of_range &oor)
     {
-        auto solarEnergy = static_cast<short>(static_cast<float>(probes.at(1).realTime.at(19)-probes.at(3).realTime.at(19)) * 4.186 * static_cast<float>(flowMeter::instance.realTime.at(19)) / 100.0 / 60.0);
-        auto tankEnergy = static_cast<short>(static_cast<float>(probes.at(4).realTime.at(19)-probes.at(1).realTime.at(19)) * 4.186 * static_cast<float>(flowMeter::instance.realTime.at(19)) / 100.0 / 60.0);
-        data += String(solarEnergy) + "," + String(tankEnergy);
+        auto tempDifferential = static_cast<float>(probes.at(4).realTime.at(19)-probes.at(3).realTime.at(19));
+        auto solarPercent = static_cast<float>(probes.at(1).realTime.at(19)-probes.at(3).realTime.at(19)) / tempDifferential * 100.0;
+        data += String(solarPercent,1);
     }
+    Serial.println(data);
     return data;
 }
 
@@ -133,14 +144,14 @@ String tempProbe::getHourlyEnergy()
     String data = "";
     try
     {
-        auto solarEnergy = static_cast<short>(static_cast<float>(probes.at(1).hourly.at(indexHourly - 1)-probes.at(3).hourly.at(indexHourly-1)) * 4.186 * static_cast<float>(flowMeter::instance.hourly.at(indexHourly - 1)) / 100.0 / 3600.0);
-        auto tankEnergy = static_cast<short>(static_cast<float>(probes.at(4).hourly.at(indexHourly - 1)-probes.at(1).hourly.at(indexHourly-1)) * 4.186 * static_cast<float>(flowMeter::instance.hourly.at(indexHourly - 1)) / 100.0 / 3600.0);
+        auto solarEnergy = static_cast<short>(static_cast<float>(probes.at(1).hourly.at(indexHourly - 1)-probes.at(3).hourly.at(indexHourly-1)) * 4186 * static_cast<float>(flowMeter::instance.hourly.at(indexHourly - 1)) / 100.0 / 3600.0);
+        auto tankEnergy = static_cast<short>(static_cast<float>(probes.at(4).hourly.at(indexHourly - 1)-probes.at(1).hourly.at(indexHourly-1)) * 4186 * static_cast<float>(flowMeter::instance.hourly.at(indexHourly - 1)) / 100.0 / 3600.0);
         data += String(solarEnergy) + "," + String(tankEnergy);
     }
     catch (const std::out_of_range &oor)
     {
-        auto solarEnergy = static_cast<short>(static_cast<float>(probes.at(1).hourly.at(19)-probes.at(3).hourly.at(19)) * 4.186 * static_cast<float>(flowMeter::instance.hourly.at(19)) / 100.0 / 3600.0);
-        auto tankEnergy = static_cast<short>(static_cast<float>(probes.at(4).hourly.at(19)-probes.at(1).hourly.at(19)) * 4.186 * static_cast<float>(flowMeter::instance.hourly.at(19)) / 100.0 / 3600.0);
+        auto solarEnergy = static_cast<short>(static_cast<float>(probes.at(1).hourly.at(19)-probes.at(3).hourly.at(19)) * 4186 * static_cast<float>(flowMeter::instance.hourly.at(19)) / 100.0 / 3600.0);
+        auto tankEnergy = static_cast<short>(static_cast<float>(probes.at(4).hourly.at(19)-probes.at(1).hourly.at(19)) * 4186 * static_cast<float>(flowMeter::instance.hourly.at(19)) / 100.0 / 3600.0);
         data += String(solarEnergy) + "," + String(tankEnergy);
     }
     return data;

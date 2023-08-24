@@ -1,16 +1,10 @@
 var chartEnergyRT = new Highcharts.Chart({
     chart: { renderTo: 'chart-energy-rt' },
-    title: { text: 'Power Monitoring' },
+    title: { text: 'Percentage of Water Heating from Solar' },
     series: [{
-        type: "line",
-        showInLegend: true,
-        name: "Solar Power Input",
-        data: []
-    },
-    {
-        type: "line",
-        showInLegend: true,
-        name: "Hybrid Tank Power Input",
+        type: "area",
+        showInLegend: false,
+        name: "Solar Thermal Input",
         data: []
     }],
     plotOptions: {
@@ -25,9 +19,9 @@ var chartEnergyRT = new Highcharts.Chart({
         dateTimeLabelFormats: { second: '%H:%M:%S' }
     },
     yAxis: {
-        title: { text: 'Power (kW)' }
+        title: { text: 'Energy from Solar [%]' },
     },
-    credits: { enabled: false }
+    credits: { enabled: false },
 });
 setInterval(function () {
     let xhttp = new XMLHttpRequest();
@@ -35,13 +29,11 @@ setInterval(function () {
         if(this.readyState == 4 && this.status == 200)
         {
             let x = (new Date()).getTime(),
-                y = this.responseText.split(',').map(Number);
+                y = parseFloat(this.responseText);
                 if (chartEnergyRT.series[0].data.length > 20) {
-                    chartEnergyRT.series[0].addPoint([x, y[0]/100], true, true, true);
-                    chartEnergyRT.series[1].addPoint([x, y[1]/100], true, true, true);
+                    chartEnergyRT.series[0].addPoint([x, y], true, true, true);
                 } else {
-                    chartEnergyRT.series[0].addPoint([x, y[0]/100], true, false, true);
-                    chartEnergyRT.series[1].addPoint([x, y[1]/100], true, false, true);
+                    chartEnergyRT.series[0].addPoint([x, y], true, false, true);
                 }
 
         }
@@ -52,17 +44,17 @@ setInterval(function () {
 
 var chartEnergyHR = new Highcharts.Chart({
     chart: { renderTo: 'chart-energy-hour' },
-    title: { text: 'Energy Consumption and Generation' },
+    title: { text: 'Water Heating Energy' },
     series: [{
         type: "line",
         showInLegend: true,
-        name: "Solar Energy Generated",
+        name: "Energy from Solar",
         data: []
     },
     {
         type: "line",
         showInLegend: true,
-        name: "Hybrid Tank Energy In",
+        name: "Energy from Hybrid HW Tank",
         data: []
     }],
     plotOptions: {
@@ -77,9 +69,9 @@ var chartEnergyHR = new Highcharts.Chart({
         dateTimeLabelFormats: { minute: '%H:%M' }
     },
     yAxis: {
-        title: { text: 'Energy (kWh)' }
+        title: { text: 'Energy (Wh)' }
     },
-    credits: { enabled: false }
+    credits: { enabled: false },
 });
 setInterval(function () {
     let xhttp = new XMLHttpRequest();
@@ -104,24 +96,30 @@ setInterval(function () {
 
 var chartEnergyDay = new Highcharts.Chart({
     chart: { renderTo: 'chart-energy-day' },
-    title: { text: 'Energy Consumption and Generation' },
+    title: { text: 'Water Heating Energy' },
     series: [{
         type: "line",
         showInLegend: true,
-        name: "Solar Energy Generated",
+        name: "Energy from Solar",
         data: []
     },
     {
         type: "line",
         showInLegend: true,
-        name: "Hybrid Tank Energy In",
+        name: "Energy from Hybrid HW Tank",
         data: []
     }],
     plotOptions: {
         line: {
             animation: false,
-            dataLabels: { enabled: true }
+            dataLabels: { 
+                enabled: true,
+                format: '{point.y:.0f}'
+            }
         },
+    },
+    tooltip: {
+        valueDecimals: 2
     },
     xAxis: {
         title: { text: 'Time' },
@@ -129,7 +127,7 @@ var chartEnergyDay = new Highcharts.Chart({
         dateTimeLabelFormats: { minute: '%H:%M' }
     },
     yAxis: {
-        title: { text: 'Energy (kWh)' }
+        title: { text: 'Energy (Wh)' }
     },
-    credits: { enabled: false }
+    credits: { enabled: false },
 });

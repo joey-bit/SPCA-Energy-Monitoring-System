@@ -62,6 +62,12 @@ void setup() {
   server.on("/historical-data", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/historical_data.csv");
   });
+  server.on("/energy-rt", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", tempProbe::getRealTimePower().c_str());
+  });
+  server.on("/energy-hr", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", tempProbe::getHourlyEnergy().c_str());
+  });
   server.on("/wifi-reconnect", HTTP_GET, [](AsyncWebServerRequest *request){
     if(WiFi.status() != WL_CONNECTED)
       connectWIFI();
@@ -91,15 +97,15 @@ bool connectWIFI() {
     if(WiFi.status() == WL_CONNECTED){
       Serial.println();
       Serial.printf("Connected to the WiFi network with IP Address: %s\n", WiFi.localIP().toString().c_str());
-      digitalWrite(LED_PIN, HIGH);
       configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
       delay(500);
     if(!getLocalTime(&timeData)){
       Serial.println("Failed to obtain time");
     } else {
       Serial.printf("Current time: %s\n", asctime(&timeData));
-    } 
+      digitalWrite(LED_PIN, HIGH);
       return true;
+    } 
     }
     delay(3000);
     Serial.print(".");

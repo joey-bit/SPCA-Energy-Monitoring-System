@@ -3,7 +3,7 @@ var chartFlowRT = new Highcharts.Chart({
     title: { text: 'Hot Water Flow Rate' },
     series: [{
         type: "line",
-        showInLegend: true,
+        showInLegend: false,
         name: "Hot Water Flow",
         data: []
     }],
@@ -45,7 +45,7 @@ var chartFlowHR = new Highcharts.Chart({
     title: { text: 'Hourly Usage' },
     series: [{
         type: "line",
-        showInLegend: true,
+        showInLegend: false,
         name: "Hot Water Usage",
         data: []
     }],
@@ -87,7 +87,7 @@ var chartFlowDay = new Highcharts.Chart({
     title: { text: 'Daily Usage' },
     series: [{
         type: "line",
-        showInLegend: true,
+        showInLegend: false,
         name: "Hot Water Usage",
         data: []
     }],
