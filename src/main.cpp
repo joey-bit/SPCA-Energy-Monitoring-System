@@ -26,6 +26,7 @@ DeviceAddress addr;
 
 #define LED_PIN 2
 bool connectWIFI();
+bool reconnect = false;
 
 void setup() {
   Serial.begin(115200);
@@ -70,8 +71,8 @@ void setup() {
   });
   server.on("/wifi-reconnect", HTTP_GET, [](AsyncWebServerRequest *request){
     if(WiFi.status() != WL_CONNECTED)
-      connectWIFI();
-    request->send_P(200, "text/plain", "connected");
+      reconnect = true;
+    request->send_P(200, "text/plain", "connecting");
   });
 
   server.begin();
@@ -84,6 +85,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   tempProbe::readAllProbes();
   delay(5000);  //Actually occurs every 6 seconds because readFlowMeter takes 1 second
+  if(reconnect){
+    connectWIFI();
+  }
 }
 
 bool connectWIFI() {
